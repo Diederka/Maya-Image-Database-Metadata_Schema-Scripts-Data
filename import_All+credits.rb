@@ -1,83 +1,6 @@
 # import scripts for data ingest via database backend
-# Authors: Maximilian Broduhn and Katja Diederichs, 2018
+# Authors: Maximilian Broduhn and Katja Diederichs, 2018 - 2019
 
-=begin
-Import of ALL Entities and Relations in one Script:
-One Script to rule them all, One Script to find them,
-One Script to bring them all, and in the database bind them,
-In the Land of ConedaKOR where the Images lie.
-
-
-                                                                                 .*,,,,,,,,,,,,,,,,,,,,,.
-                                                                            */*****,,,,..,.%*(..,,,,,*,/***,,,
-                                                                        ,////******%**,,,,,,,...(&/.*.,,(%*//*#/(,
-                                                                     //////*//*****@**,,,,%(.& *%.%. ##%.&.,,***(%*(/.
-                                                                  //////////*/*%(***%*%%*(&(,#..&.,%/     &...,,/,&***,*.
-                                                               *//////////////*&*****#*@(%&,....  .(    *  ...,#(,****,(,
-                                                             (///////////////***%#(*/&*#/*****,,,..  &     /   . %,*,,***(,,,.
-                                                          //////////////////**/(%**#//&*********,,.. &     %    ..,,.,,******,,.
-                                                        ////////&&&%////////*****((***&****/******,,.%     *         ...,,*****,,.
-                                                      (///////*&&&(@////***************#******/****,...          .,***,,,,,,,,,,*,,
-                                                   .////////#%(////(///****************&*************,...  .,*,,,,,,,,,,,,,,,,,,,,..,
-                                                 ,**********@/%///(%**/****************@**************.,/*,,,,,,,****/(////*,,,,,,,,,.
-                                                ************&*(#/&/////%#*****/********@*************/,,,,,,,,,,,*/,,,(,(#/*////,,,,,,,.
-                                              *,,,,,,*#,****#/%&/&***/*****************@*******/*/*,,,,,.... .,,,,*,,,#,*,,/,*///**,,,,,.
-                                            ,,,,,,,,&%,&,,**&(***&(********************#*////(#,,,,,...      ,,,,,,,,,,/,*,,,/,**/*#*,,,,.
-                                           ,,,.,,,,&,&&,,,#%*,**#/@,********************///%(,,,,...         ,,.,,,/,/,%,((/,,,,(*/*/*,,,,.
-                                         ,.........@.,,,,(,,*&%&***@**************//////(&,,,,...            ,...%#,,.,/,/,,,/,,/,/****,,,,
-                                        ...........&...%&,,,*,,****#%**********/**////((,,,,..              ....,(%,,.,,(,(.,,**,,..,,(,,,,
-                                      .......... ..@./%,,,,,&,,,****@**********/////((,,,..                 ,....*,,..,,,(.,,,,,*,,,,,*/,,,.
-                                     .........#*(..(%%..*&,&@.,,,,**(*********////(/,,,..                   ......*..../,.*(..,,./,,,.,(,,,,
-                                    ........ *&* ..%*,...#*..%,,,*,,,&*******///(,,,..                     ....,...*..%(.(/.*...,,*,,,,/,,,,
-                                  ..... .     .. && ....../*,,,,,*,@,*****//(/,,,.                       ....,....,.*.(.,..,*.,..,,,./*,,,
-                                 .. .          ./ . &,.....#%.,,,,***%*****/((,,,.                        ......,....%#,./,..../.,.,,,.,*,,,
-                                ..            (&% .%(*/##...,,,,********/(,,,.                          ......,...,*..*#......(....,.,*,,,
-                               ...           &&.&  , ..,,.....,,,,,***//((,,,.                           ....,%#.,..*,(.,*......./.....**,,.
-                              ...   */      %  & % .  ........,,,,,**/((,,,.                            ..,../%,/......,#........./....***,
-                             ....  @, @   /&%  *&(/  . .......,,,,**/#(,,..                            ....,,*.,..,,..,,,..........,../,,,,
-                            ,.....,,&%,   %  #/&  %. ........,,,**/#(,,,.                              ......,,,,...(.(..#(.........../,**.
-                           ,......,.    &(#  &%   .& ........,,,**#(,,..                              .   ....*../%%,*,..(,*.........*,,*,
-                          ,,.......* . .,*& %(     (,.......,,,*/(,,,.                                     ....*,/..*,.(...#........./,,*.
-                         ,,,,,.....%..&%&* %(     . & .....,,,*#(,,.                                    .       (#*,#*,,/&(.........*,,*,
-                        ,,,,,,....../ %. &.*# ..  ..%*.....,,,(/,,.                                             ,.*......,.........,/***
-                       ,,,,,,,,,,...(%%.&%,.*#.......%...,,,,#*,,                                             .(#  , .......,...,../***.
-                       ,,,,,,,,,,..&&@%/.....(,......#,,,,,*(,,.                                        .     .  .,    ........,../***,
-                      ,,,,,,,,,,,,.%.,%%.,....@.....,,#,,,*(,,.                                         ,   ,*/  (        .......,/***
-                      ,,,,,,,,,,,/&%,@%#,,,,.,,&.,,,,,,,**(*,.                                          .       (            ...,****
-                     ,,,,,,,,,,,,&,.&,,,,,,,,,,#(,,,,,***(,,.                                       ,.   /*%   *               .*/**.
-                     ,,,,,,,,,,.@%,,,*,,,,,,,,,,&,,,,,**(,,.                                       *.    *, * .                */**.
-                    ,,,,,,,,,,,%#//(&,,,*,,,,,,**/,,***/,,.                              .             ,  / ./                */**.
-                    ,,,,,,,,,,,%&.*%,************%****(,,.                             ..            .#.  *. *               //**.
-                    ,,,,,,,,,.&..&.,&,,,*************/,,,                             ,..           ,. / .,/                *(**.
-                   .,,,,,,.,.(%%,,&,,&,,,***********/,,,                            ,........      /,  ..  .. *            *(**.
-                   ,,,,,,*%.,&,.&%*((.@,,,,********/,,,                           *,***,.......   * *  ,    * ,           /(**.
-                   ,,,,,,,/.,%&.,*,,,(,&,,,,,****//*,,.                         ********(%*,.....,   ,.     *  ,        ,#(**.
-                   ,,,,,,,,,*@/%,,,,#,&,,,,,,,***,,,                        /*******###*#**,......        *  *       *%(**.
-                   ,,,,#,,,,.,./&&,,,,.&,&,,,,,,**,,,                       //******(&(/#(******,......     *  *     .(#/*,.
-                   ,,,,,/,,,,,(,,&,,,,&,#,,,,,**,,,                     //*******%/#*************,......  *  *    *%(**.
-                   .,,,,,*,,&.#.*,,,#,,,.&,&,,,,*,,,                   .///*******(//#**/(**********,*......*     ./%/**.
-                    ,,,/%,,,%*&/,,,,,%,,,,&,*,,,*,,,                 ///**********(/*%*%(/***************,.,.....*#(**,.
-                    .,,,(%,(#/,#,,,,,,#,,,,%,,,*,,,,              ,/////*/(%(((****##&&***/****************,,..**(/**.
-                     ,,,,,,,&,%@,,,,,,,%,,,,,,**,,,.            /****/*//((%(#/***%&/*%***/*******************/*/**,.
-                      ,,,,,,&(*%,,,,,,,,%,,,,,**,,,         .***********/#///*//(##/**%(********************/*/**,.
-                       ,,,*,*,,%,,,,,,,,,#,,,,*,,,,      **,,,***********#**//%((*(&&%*%******************/*//**.
-                       .,,*,*,%%/**,,,,,,,,,,**,,,,.****,,,,,**,***%#/***#(&%///*/#/***&/****************/*/**..
-                         .,******,&,,,,*,*,,,,*,,,,*******,*(*,,,,,#****%/#***%#%%/*//*#(**************//(**..
-                          .,%##****,%,**,*,,,,*,,,,/*******/#(*,,,,,*%%&*%***/***/(/*/*(#*/*********///(**..
-                            .%#/*****//****,,,*,,,,////********(/(/,,,%(#*****#/*****(#*//******////**..
-                             ../&******/,******,,,,,,**///%%(#**&*,,%,,*,,,(%%(********/#///****//%***..
-                               .,*%******(******,,,,%,,%*/#/%(&%#&***#,,,,,,,,,,*************/*((**,.
-                                 ..*#******(****,,,,.//*,,**/&//*//**&**,,,,,,,,,,*******,/**/***..
-                                   ..************,,,,.(((/***/#///%**#/****,,,,,,,,,*,.*,,****...
-                                     ...**********,,,,,*##((#*%/*/#//#/*****,,,,,,..  ,****...
-                                        ...*******,,,,,,..((/((#*((//(/(///***,   ,*****...
-                                           ...******,,,,,,,..,((//#///((/,.  .,*,****...
-                                              ...,****,,,,,,,,,,,,,,,,,,,,,******,...
-                                                  .....,**,,,,,,,,,,,,*******,...
-                                                       ........,,,,,,,.......
-
-Ring by Ascii Art Converter
-=end
 
 ############################## Import all Entities #####################################
 KOR_ROOT="/home/kor/kor/"
@@ -87,7 +10,7 @@ KOR_ROOT="/home/kor/kor/"
 require "#{KOR_ROOT}/config/environment"
 require 'json'
 require 'dimensions'
-# require 'RMagick'
+
 default = Collection.where(:name => 'Guest Collection').first
 document = Kind.where(:name => 'medium').first
 
@@ -97,10 +20,10 @@ imageNotFound = []
 File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do |line|
   fields = line.split(";")
 
-  width = Dimensions.width("/home/kor/IMAGESinJPG/" + fields[1] + ".jpg")
-  height = Dimensions.height("/home/kor/IMAGESinJPG/" + fields[1] + ".jpg")
-# relsolution wäre auch wichtig! ich habe es mal auskommentiert hier und unten reingetan.
-# resolution = Dimensions.resolution("/home/kor/IMAGESinJPG/" + fields[1] + ".jpg")
+  if(File.file?("/home/kor/IMAGESinJPG/" + fields[1] + ".jpg"))
+    width = Dimensions.width("/home/kor/IMAGESinJPG/" + fields[1] + ".jpg")
+    height = Dimensions.height("/home/kor/IMAGESinJPG/" + fields[1] + ".jpg")
+    end
 
   jsonData = "{\"image_no\" : \"" + fields[1] + "\",
 
@@ -114,8 +37,6 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
 \"date_time_created\" : \"" + fields[3] + "\",
 \"note\" : \"" + fields[21] + "\",
 \"file_name\" : \"" + fields[1] + "\",
-\"image_additional_publication\" : \"" + fields[24] + "\",
-\"image_additional_publication_zotero\" : \"" + fields[25] + "\",
 
 \"contributor\" : \"Project Text Database and Dictionary of Classic Mayan\",
 \"rights_holder\" : \"Karl Herbert Mayer\",
@@ -130,7 +51,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
 \"date_of_digitization\" : \"2017\",
 \"color_space\" : \"RGB\",
 \"scanner_model_number\" : \"5000\",
-\"scanner_model_name\" : \" Nikon Coolscan 5000 ED\",
+\"scanner_model_name\" : \"Nikon Coolscan 5000 ED\",
 \"scanning_software_name\" : \"HDR SilverFast Soft\",
 \"scanning_software_version_no\" : \"HDR SilverFast Soft\",
 
@@ -140,9 +61,10 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
 \"medium_was_created_at_place\" : \"" + fields[5] + "\"}"
 
   jsonObj = JSON.parse(jsonData)
-  #puts jsonData
+  puts jsonData
 
   if(File.file?("/home/kor/IMAGESinJPG/" + fields[1] + ".jpg"))
+    
     work = Entity.new(
       :kind => document,
       :medium => Medium.new(document: File.open("/home/kor/IMAGESinJPG/" + fields[1] + ".jpg")),
@@ -160,21 +82,19 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
         p work
         p work.errors.full_messages
       end
-    else
+  else
+      puts "Bilddatei nicht gefunden"
       imageNotFound << fields[1]
-    end
   end
+end
 
 for image in imageNotFound
   puts image
 end
 
-KOR_ROOT="/home/kor/kor/"
-# import_Artefact+Relation.rb
-# loading the rails environment
 
-require "#{KOR_ROOT}/config/environment"
-require 'json'
+
+
 
 default = Collection.where(:name => 'Guest Collection').first
 document = Kind.where(:name => 'Artefact').first
@@ -198,7 +118,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
 }"
 
   jsonObj = JSON.parse(jsonData)
-  #puts jsonData
+  puts jsonData
 
   work = Entity.new(
     :kind => document,
@@ -217,12 +137,9 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   end
 end
 
-KOR_ROOT="/home/kor/kor/"
-# import_Collection+Relation.rb
-# loading the rails environment
 
-require "#{KOR_ROOT}/config/environment"
-require 'json'
+
+
 
 default = Collection.where(:name => 'Guest Collection').first
 document = Kind.where(:name => 'Collection').first
@@ -236,7 +153,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
 \"collection_was_located_in_place\" : \"" + fields[5] + "\",
 \"collection_from_where_medium_was_created\" : \"" + fields[1] + "\"}"
   jsonObj = JSON.parse(jsonData)
-  #puts jsonData
+  puts jsonData
 
   work = Entity.new(
     :kind => document,
@@ -255,12 +172,9 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   end
 end
 
-KOR_ROOT="/home/kor/kor/"
-# import_Person+Relation.rb
-# loading the rails environment
 
-require "#{KOR_ROOT}/config/environment"
-require 'json'
+
+
 
 default = Collection.where(:name => 'Guest Collection').first
 document = Kind.where(:name => 'Person').first
@@ -274,7 +188,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
 }"
 
   jsonObj = JSON.parse(jsonData)
-  #puts jsonData
+  puts jsonData
 
   work = Entity.new(
     :kind => document,
@@ -293,12 +207,9 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   end
 end
 
-KOR_ROOT="/home/kor/kor/"
-#import_Place+Relation.rb
-#loading the rails environment
 
-require "#{KOR_ROOT}/config/environment"
-require 'json'
+
+
 
 default = Collection.where(:name => 'Guest Collection').first
 document = Kind.where(:name => 'Place').first
@@ -334,12 +245,9 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   end
 end
 
-KOR_ROOT="/home/kor/kor/"
-# import_Site+Relation.rb
-# loading the rails environment
 
-require "#{KOR_ROOT}/config/environment"
-require 'json'
+
+
 
 default = Collection.where(:name => 'Guest Collection').first
 document = Kind.where(:name => 'Provenance').first
@@ -353,7 +261,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   }"
 
   jsonObj = JSON.parse(jsonData)
-  #puts jsonData
+  puts jsonData
 
   work = Entity.new(
     :kind => document,
@@ -372,12 +280,10 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   end
 end
 
-KOR_ROOT="/home/kor/kor/"
-# import_Holder+Relation.rb
-# loading the rails environment
 
-require "#{KOR_ROOT}/config/environment"
-require 'json'
+
+
+
 
 default = Collection.where(:name => 'Guest Collection').first
 document = Kind.where(:name => 'Holder').first
@@ -391,7 +297,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   }"
 
   jsonObj = JSON.parse(jsonData)
-  #puts jsonData
+  puts jsonData
 
   work = Entity.new(
     :kind => document,
@@ -410,12 +316,12 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   end
 end
 
+
+
+
 ############################## Import their Relations #####################################
 
-KOR_ROOT="/home/kor/kor/"
-# artefact_was_located_in_place.rb
-# loading the rails environment
-require "#{KOR_ROOT}/config/environment"
+
 
 default = Collection.where(:name => 'default').first
 place = Kind.where(:name => 'Place').first
@@ -430,12 +336,10 @@ relationship =
       end
     end
   end
-puts "Finished"
+puts "Finished artefact_was_located_in_place"
 
-KOR_ROOT="/home/kor/kor/"
-# place_located_artefact.rb
-# loading the rails environment
-require "#{KOR_ROOT}/config/environment"
+
+
 
 default = Collection.where(:name => 'default').first
 artefact = Kind.where(:name => 'Artefact').first
@@ -450,12 +354,9 @@ relationship =
     end
   end
 end
-puts "Finished"
+puts "Finished place_located_artefact"
 
-KOR_ROOT="/home/kor/kor/"
-# artefact_originates_from_provenance.rb
-# loading the rails environment
-require "#{KOR_ROOT}/config/environment"
+
 
 default = Collection.where(:name => 'default').first
 provenance = Kind.where(:name => 'Provenance').first
@@ -470,12 +371,10 @@ relationship =
       end
     end
   end
-puts "Finished"
+puts "Finished artefact_originates_from_provenance"
 
-KOR_ROOT="/home/kor/kor/"
-# artefact_was_held_by_collection.rb
-# loading the rails environment
-require "#{KOR_ROOT}/config/environment"
+
+
 
 default = Collection.where(:name => 'default').first
 collection = Kind.where(:name => 'Collection').first
@@ -490,12 +389,10 @@ relationship =
       end
     end
   end
-puts "Finished"
+puts "Finished artefact_was_held_by_collection"
 
-KOR_ROOT="/home/kor/kor/"
-# medium_was_created_at_place.rb
-# loading the rails environment
-require "#{KOR_ROOT}/config/environment"
+
+
 
 default = Collection.where(:name => 'default').first
 place = Kind.where(:name => 'Place').first
@@ -510,12 +407,11 @@ relationship =
       end
     end
   end
-puts "Finished"
+puts "Finished medium_was_created_at_place"
 
-KOR_ROOT="/home/kor/kor/"
-# place_located_collection.rb
-# loading the rails environment
-require "#{KOR_ROOT}/config/environment"
+
+
+
 
 default = Collection.where(:name => 'default').first
 collection = Kind.where(:name => 'Collection').first
@@ -530,12 +426,11 @@ relationship =
     end
   end
 end
-puts "Finished"
+puts "Finished place_located_collection"
 
-KOR_ROOT="/home/kor/kor/"
-# medium_was_created_from_collection.rb
-# loading the rails environment
-require "#{KOR_ROOT}/config/environment"
+
+
+
 
 default = Collection.where(:name => 'default').first
 collection = Kind.where(:name => 'Collection').first
@@ -550,14 +445,13 @@ relationship =
       end
     end
   end
-  puts "Finished"
+  puts "Finished medium_was_created_from_collection" 
 
 
-  KOR_ROOT="/home/kor/kor/"
-  # medium_depicts_artefact.rb
-  # loading the rails environment
-  require "#{KOR_ROOT}/config/environment"
-
+ 
+ 
+ 
+ 
   default = Collection.where(:name => 'default').first
   artefact = Kind.where(:name => 'Artefact').first
   medium = Kind.where(:name => 'Medium').first
@@ -571,12 +465,11 @@ relationship =
         end
       end
     end
-  puts "Finished"
+  puts "Finished medium_depicts_artefact"
 
-  KOR_ROOT="/home/kor/kor/"
-  # collection_was_held_by_holder.rb
-  # loading the rails environment
-  require "#{KOR_ROOT}/config/environment"
+
+
+
 
   default = Collection.where(:name => 'default').first
   holder = Kind.where(:name => 'Holder').first
@@ -591,13 +484,12 @@ relationship =
         end
       end
     end
-  puts "Finished"
+  puts "Finished collection_was_held_by_holder"
 
-  KOR_ROOT="/home/kor/kor/"
-  # place_was_visited_by_person.rb
-  # loading the rails environment
-  require "#{KOR_ROOT}/config/environment"
-
+ 
+ 
+ 
+ 
   default = Collection.where(:name => 'default').first
   person = Kind.where(:name => 'Person').first
   place = Kind.where(:name => 'Place').first
@@ -611,12 +503,11 @@ relationship =
         end
       end
     end
-  puts "Finished"
+  puts "Finished place_was_visited_by_person"
 
-  KOR_ROOT="/home/kor/kor/"
-  # place_locates_holder.rb
-  # loading the rails environment
-  require "#{KOR_ROOT}/config/environment"
+
+
+
 
   default = Collection.where(:name => 'default').first
   holder = Kind.where(:name => 'Holder').first
@@ -631,11 +522,11 @@ relationship =
         end
       end
     end
-  puts "Finished"
-  KOR_ROOT="/home/kor/kor/"
-  # medium_was_created_by_person.rb
-  # loading the rails environment
-  require "#{KOR_ROOT}/config/environment"
+  puts "Finished place_located_holder"
+
+
+
+
 
   default = Collection.where(:name => 'default').first
   person = Kind.where(:name => 'Person').first
@@ -650,11 +541,11 @@ relationship =
         end
       end
     end
-  puts "Finished"
-  KOR_ROOT="/home/kor/kor/"
-  # artefact_was_documented_by_person.rb
-  # loading the rails environment
-  require "#{KOR_ROOT}/config/environment"
+  puts "Finished medium_was_created_by_person"
+
+
+
+
 
   default = Collection.where(:name => 'default').first
   person = Kind.where(:name => 'Person').first
@@ -669,7 +560,10 @@ relationship =
         end
       end
     end
-  puts "Finished once and for all!!!!!!!!!!!!!!!!"
+  puts "Finished artefact_was_documented_by_person"
+  
+  puts "Finished all!!!!!!!"
+  
 =begin
   Otto the Open Access Otter says "Goodbye!"
   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
