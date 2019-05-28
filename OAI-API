@@ -1,0 +1,10 @@
+The OAI-API can be used for harvesting and reusing the metadata of the Maya Image Archive. 
+Its software ConedaKOR spawns four OAI-PMH endpoints for entities, kinds, relations and relationships:
+https://classicmayan.kor.de.dariah.eu/api/oai-pmh/entities?verb=Identify
+https://classicmayan.kor.de.dariah.eu/api/oai-pmh/kinds?verb=Identify
+https://classicmayan.kor.de.dariah.eu/api/oai-pmh/relations?verb=Identify
+https://classicmayan.kor.de.dariah.eu/api/oai-pmh/relationships?verb=Identify
+Please refer to the OAI-PMH specification for further information on available verbs and on how to use them.
+The api will retrieve entities and relationships according to the authenticated user’s permissions. Kinds and relations are available without authentication. Please check out Authentication for how to use an api key.
+Two formats are available: oai_dc and kor. While the former is only maintained to fulfill the OAI-PMH specification, the latter gives full access to all content within the ConedaKOR installation. According to specification, you must choose the format like so metadataPrefix=kor as a request parameter. The kor format adheres to a schema that is included in ConedaKOR. It can be found at
+https://kor.example.com/schema/1.0/kor.xsd
