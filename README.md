@@ -1,7 +1,7 @@
-Documentation of Metadata schema and informations about the OAI-API: 
-
 We provide 
-our application profile (metadata schema and documentation.  
+
+Our application profile (metadata schema and documentation).  
+
 And an example of an initial import-csv-file. 
 
 Also a ruby script for initial import for the entities and relationships for our Maya Image Database 
