@@ -1,11 +1,14 @@
 # import scripts for data ingest via database backend
-# Authors: Maximilian Brodhun and Katja Diederichs, 2018 - 2019
+# Authors: Maximilian Brodhun, Katja Diederichs and Moritz Schepp, 2018 - 2019
 
 # new: 08.2019: culture and culture_in_aat get static values 
 
 
 ############################## Import all Entities #####################################
-KOR_ROOT="/home/kor/kor/"
+KOR_ROOT="/home/kor/kor"
+SIMULATION=true
+
+puts "SIMULATION MODE" if SIMULATION
 
 # helper methods
 
@@ -109,17 +112,18 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
       :datings => [
         EntityDating.new(label: "Year", dating_string: fields[3])
       ]
-      )
-      if work.valid?
-        p work
-        work.save
-      else
-        p work
-        p work.errors.full_messages
-      end
+    )
+
+    if work.valid?
+      p work
+      work.save unless SIMULATION
+    else
+      p work
+      p work.errors.full_messages
+    end
   else
-      puts "Bilddatei nicht gefunden"
-      imageNotFound << fields[1]
+    puts "Bilddatei nicht gefunden"
+    imageNotFound << fields[1]
   end
 end
 
@@ -171,7 +175,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
 
   if work.valid?
     p work
-    work.save
+    work.save unless SIMULATION
   else
     p work
     p work.errors.full_messages
@@ -203,7 +207,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
 
   if work.valid?
     p work
-    work.save
+    work.save unless SIMULATION
   else
     p work
     p work.errors.full_messages
@@ -235,7 +239,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
 
   if work.valid?
     p work
-    work.save
+    work.save unless SIMULATION
   else
     p work
     p work.errors.full_messages
@@ -248,7 +252,7 @@ document = Kind.where(:name => 'Place').first
 
 File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do |line|
   fields = line.split(";")
- puts fields[24]
+  puts fields[24]
 
   plc=''
   if (fields[23].nil?)
@@ -256,7 +260,6 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   else
     plc = fields[23]
   end
-
 
   jsonData = "{\"place_in_twkm_database\" : \"" + fields[6] + "\",
  \"place_located_holder\" : \"" + fields[7] + "\",
@@ -269,6 +272,16 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   jsonObj = JSON.parse(jsonData)
   puts jsonData
 
+  # TODO: why not like this?
+  # jsonObj = {
+  #   'place_in_twkm_database' => fields[6],
+  #   'place_located_holder' => fields[7],
+  #   'place_located_artefact' => fields[13],
+  #   'place_was_visited_by_person' => fields[22],
+  #   'place_located_collection' => fields[23],
+  #   'place_where_medium_was_created' => fields[1]
+  # }
+
   work = Entity.new(
     :kind => document,
     :collection => default,
@@ -279,7 +292,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
 
   if work.valid?
     p work
-    work.save
+    work.save unless SIMULATION
   else
     p work
     p work.errors.full_messages
@@ -311,7 +324,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
 
   if work.valid?
     p work
-    work.save
+    work.save unless SIMULATION
   else
     p work
     p work.errors.full_messages
@@ -352,7 +365,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
 
   if work.valid?
     p work
-    work.save
+    work.save unless SIMULATION
   else
     p work
     p work.errors.full_messages
@@ -374,7 +387,11 @@ relationship =
     place.entities.where(:name => artefact_entity.dataset['artefact_was_located_in_place']).each do |place_entity|
       puts "SUCCESS"
       unless Relationship.related?(artefact_entity, "artefact is / was located in place", place_entity)
-        Relationship.relate_and_save(artefact_entity, "artefact is / was located in place", place_entity)
+        unless SIMULATION
+          # TODO: this and all other instances of this might fail validations
+          # but still return the (unsaved) relationship
+          Relationship.relate_and_save(artefact_entity, "artefact is / was located in place", place_entity)
+        end
       end
     end
   end
@@ -390,7 +407,9 @@ relationship =
     holder.entities.where(:name => place_entity.dataset['place_located_holder']).each do |holder_entity|
       puts "SUCCESS"
       unless Relationship.related?(place_entity, "place locates / located holder", holder_entity)
-        Relationship.relate_and_save(place_entity, "place locates / located holder", holder_entity)
+        unless SIMULATION
+          Relationship.relate_and_save(place_entity, "place locates / located holder", holder_entity)
+        end
       end
     end
   end
@@ -405,7 +424,9 @@ relationship =
     provenance.entities.where(:name => artefact_entity.dataset['artefact_originates_from_provenance']).each do |provenance_entity|
       puts "SUCCESS"
       unless Relationship.related?(artefact_entity, "artefact originates from provenance", provenance_entity)
-        Relationship.relate_and_save(artefact_entity, "artefact originates from provenance", provenance_entity)
+        unless SIMULATION
+          Relationship.relate_and_save(artefact_entity, "artefact originates from provenance", provenance_entity)
+        end
       end
     end
   end
@@ -420,7 +441,9 @@ relationship =
     artefact.entities.where(:name => collection_entity.dataset['collection_held_artefact']).each do |artefact_entity|
       puts "SUCCESS"
       unless Relationship.related?(collection_entity, "collection holds / held artefact", artefact_entity)
-        Relationship.relate_and_save(collection_entity, "collection holds / held artefact", artefact_entity)
+        unless SIMULATION
+          Relationship.relate_and_save(collection_entity, "collection holds / held artefact", artefact_entity)
+        end
       end
     end
   end
@@ -435,7 +458,9 @@ relationship =
     place.entities.where(:name => medium_entity.dataset['medium_was_created_at_place']).each do |place_entity|
       puts "SUCCESS"
       unless Relationship.related?(medium_entity, "medium was created at place", place_entity)
-        Relationship.relate_and_save(medium_entity, "medium was created at place", place_entity)
+        unless SIMULATION
+          Relationship.relate_and_save(medium_entity, "medium was created at place", place_entity)
+        end
       end
     end
   end
@@ -448,12 +473,14 @@ place = Kind.where(:name => 'Place').first
 relationship =
   place.entities.each do |place_entity|
     collection.entities.where(:name => place_entity.dataset['place_located_collection']).each do |collection_entity|
-    puts "SUCCESS"
-    unless Relationship.related?(place_entity, "place locates / located collection", collection_entity)
-      Relationship.relate_and_save(place_entity, "place locates / located collection", collection_entity)
+      puts "SUCCESS"
+      unless Relationship.related?(place_entity, "place locates / located collection", collection_entity)
+        unless SIMULATION
+          Relationship.relate_and_save(place_entity, "place locates / located collection", collection_entity)
+        end
+      end
     end
   end
-end
 puts "Finished"
 
 default = Collection.where(:name => 'default').first
@@ -465,7 +492,9 @@ relationship =
     collection.entities.where(:name => medium_entity.dataset['medium_was_created_from_collection']).each do |collection_entity|
       puts "SUCCESS"
       unless Relationship.related?(medium_entity, "medium was created from collection", collection_entity)
-        Relationship.relate_and_save(medium_entity, "medium was created from collection", collection_entity)
+        unless SIMULATION
+          Relationship.relate_and_save(medium_entity, "medium was created from collection", collection_entity)
+        end
       end
     end
   end
@@ -480,7 +509,9 @@ relationship =
       artefact.entities.where(:name => medium_entity.dataset['medium_depicts_artefact']).each do |artefact_entity|
         puts "SUCCESS"
         unless Relationship.related?(medium_entity, "medium depicts artefact", artefact_entity)
-          Relationship.relate_and_save(medium_entity, "medium depicts artefact", artefact_entity)
+          unless SIMULATION
+            Relationship.relate_and_save(medium_entity, "medium depicts artefact", artefact_entity)
+          end
         end
       end
     end
@@ -495,7 +526,9 @@ relationship =
     holder.entities.where(:name => collection_entity.dataset['collection_was_held_by_holder']).each do |holder_entity|
     puts "SUCCESS"
       unless Relationship.related?(collection_entity, "collection is / was held by holder", holder_entity)
-        Relationship.relate_and_save(collection_entity, "collection is / was held by holder", holder_entity)
+        unless SIMULATION
+          Relationship.relate_and_save(collection_entity, "collection is / was held by holder", holder_entity)
+        end
       end
     end
   end
@@ -510,7 +543,9 @@ puts "Finished collection_was_held_by_holder"
       person.entities.where(:name => place_entity.dataset['place_was_visited_by_person']).each do |person_entity|
         puts "SUCCESS"
         unless Relationship.related?(place_entity, "place was visited by person", person_entity)
-          Relationship.relate_and_save(place_entity, "place was visited by person", person_entity)
+          unless SIMULATION
+            Relationship.relate_and_save(place_entity, "place was visited by person", person_entity)
+          end
         end
       end
     end
@@ -525,7 +560,9 @@ puts "Finished collection_was_held_by_holder"
       holder.entities.where(:name => place_entity.dataset['place_located_holder']).each do |holder_entity|
         puts "SUCCESS"
         unless Relationship.related?(place_entity, "place located holder", holder_entity)
-          Relationship.relate_and_save(place_entity, "place located holder", holder_entity)
+          unless SIMULATION
+            Relationship.relate_and_save(place_entity, "place located holder", holder_entity)
+          end
         end
       end
     end
@@ -540,7 +577,9 @@ puts "Finished collection_was_held_by_holder"
       person.entities.where(:name => medium_entity.dataset['medium_was_created_by_person']).each do |person_entity|
         puts "SUCCESS"
         unless Relationship.related?(medium_entity, "medium was created by person", person_entity)
-          Relationship.relate_and_save(medium_entity, "medium was created by person", person_entity)
+          unless SIMULATION
+            Relationship.relate_and_save(medium_entity, "medium was created by person", person_entity)
+          end
         end
       end
     end
@@ -555,7 +594,9 @@ puts "Finished collection_was_held_by_holder"
       person.entities.where(:name => artefact_entity.dataset['artefact_was_documented_by_person']).each do |person_entity|
         puts "SUCCESS"
         unless Relationship.related?(artefact_entity, "artefact was documented by person", person_entity)
-          Relationship.relate_and_save(artefact_entity, "artefact was documented by person", person_entity)
+          unless SIMULATION
+            Relationship.relate_and_save(artefact_entity, "artefact was documented by person", person_entity)
+          end
         end
       end
     end
