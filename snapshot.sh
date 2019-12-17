@@ -1,6 +1,8 @@
 #!/bin/bash -e
 
-source .env
+ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+source $ROOT/.env
 
 TS=$(date '+%Y%m%d_%H%M%S')
 TARGET="$BACKUP_DIRECTORY/$TS"
