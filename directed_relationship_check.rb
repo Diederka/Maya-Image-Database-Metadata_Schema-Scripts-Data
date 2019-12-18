@@ -19,7 +19,6 @@ def validate(relationship, normal, reversal)
      relationship.id != normal.relationship_id ||
      relationship.id != reversal.relationship_id
      
-     binding.pry
      unless SIMULATION
        relationship.ensure_directed
        relationship.save!
@@ -31,7 +30,7 @@ Relationship.includes(:relation, :normal, :reversal).find_each do |r|
   validate(r, r.normal, r.reversal)
 end
 
-DirectedRelationship(relationship: [:normal, :reversal]).find_each do |dr|
+DirectedRelationship.includes(relationship: [:normal, :reversal]).find_each do |dr|
   if dr.is_reverse?
     validate(dr.relationship, dr.relationship.normal, dr)
   else
