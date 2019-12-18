@@ -1,13 +1,16 @@
 #!/usr/bin/env ruby
 
 KOR_ROOT='/home/kor/kor'
+SIMULATION=true
+
+puts "SIMULATION MODE" if SIMULATION
 
 require 'pry'
 require "#{KOR_ROOT}/config/environment"
 
 def pretty(relationship)
   r = relationship
-  "#{r.id}: #{r.from.name} - #{r.relation.name} / #{r.relation.reverse_name} -> #{r.to.name}"
+  "#{r.id}: #{r.from.name} -- #{r.relation.name} / #{r.relation.reverse_name} --> #{r.to.name}"
 end
 
 counts = Relationship.group(:from_id, :relation_id, :to_id).count
@@ -40,7 +43,8 @@ counts.each do |combination, count|
     end
 
     relationships[1..-1].each do |r|
-      puts "deleting #{r.id}"
+      puts "deleting #{r.id}" + (SIMULATION ? ' (simulation)', '')
+      r.destroy unless SIMULATION
     end
   end
 end
