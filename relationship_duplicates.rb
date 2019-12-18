@@ -2,13 +2,15 @@
 
 KOR_ROOT='/home/kor/kor'
 
-require 'dotenv'
 require 'pry'
-
 require "#{KOR_ROOT}/config/environment"
 
-counts = Relationship.group(:from_id, :relation_id, :to_id).count
+def pretty(relationship)
+  r = relationship
+  "#{r.id}: #{r.from.name} - #{r.relation.name} / #{r.relation.reverse_name} -> #{r.to.name}"
+end
 
+counts = Relationship.group(:from_id, :relation_id, :to_id).count
 counts.each do |combination, count|
   if count > 1
     p "-- #{combination.inspect}: #{count}"
@@ -20,7 +22,7 @@ counts.each do |combination, count|
     )
 
     relationships.each do |r|
-      p r
+      puts pretty(r)
     end
 
     properties = relationships.map{|r| r.properties}.uniq
@@ -30,7 +32,7 @@ counts.each do |combination, count|
       next
     end
 
-    datings = relationships.map{|r| r.datings.map{|d| [d.label, d.dating_string]}}
+    datings = relationships.map{|r| r.datings.map{|d| [d.label, d.dating_string]}}.uniq
     if datings.size > 1
       puts "datings are not the same for all relationships"
       p datings
