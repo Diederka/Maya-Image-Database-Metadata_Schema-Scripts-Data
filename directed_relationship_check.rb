@@ -14,8 +14,8 @@ def validate(relationship, normal, reversal)
     puts "incomplete data for validation: #{ids.inspect}"
   end
 
-  if relationship.name != normal.relation_name ||
-     relationship.reverse_name != reversal.relation_name
+  if relationship.relation.name != normal.relation_name ||
+     relationship.relation.reverse_name != reversal.relation_name
      relationship.id != normal.relationship_id ||
      relationship.id != reversal.relationship_id
      
@@ -27,12 +27,12 @@ def validate(relationship, normal, reversal)
   end
 end
 
-Relationship.find_each do |r|
+Relationship.includes(:relation, :normal, :reversal).find_each do |r|
   validate(r, r.normal, r.reversal)
 end
 
-DirectedRelationship.find_each do |dr|
-  if dr.is_reversal?
+DirectedRelationship(relationship: [:normal, :reversal]).find_each do |dr|
+  if dr.is_reverse?
     validate(dr.relationship, dr.relationship.normal, dr)
   else
     validate(dr.relationship, dr, dr.relationship.reversal)
