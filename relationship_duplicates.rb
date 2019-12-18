@@ -43,7 +43,7 @@ counts.each do |combination, count|
     end
 
     relationships[1..-1].each do |r|
-      puts "deleting #{r.id}" + (SIMULATION ? ' (simulation)', '')
+      puts "deleting #{r.id}" + (SIMULATION ? ' (simulation)' : '')
       r.destroy unless SIMULATION
     end
   end
