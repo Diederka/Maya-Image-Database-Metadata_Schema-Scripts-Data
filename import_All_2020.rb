@@ -181,25 +181,42 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
     awhbc = fields[23]
   end
 
-  jsonData = "{
-  \"artefact_type\" : \"" + fields[14] + "\",
-  \"artefact_type_in_twkm_database\" : \"" + fields[15] + "\",
-  \"artefact_in_twkm_database\" : \"" + fields[16] + "\",
-  \"catalog_no\" : \"" + fields[17] + "\",
-  \"artefact_publication\" : \"" + fields[18] + "\",
-  \"artefact_publication_zotero\" : \"" + fields[19] + "\",
-  \"inventory_no\" : \"" + fields[20] + "\",
-  \"artefact_is_depicted_by_medium\" : \"" + fields[1] + "\",
-  \"artefact_was_located_in_place\" : \"" + fields[5] + "\",
-  \"artefact_originates_from_provenance\" : \"" + fields[9] + "\",
-  \"artefact_was_documented_by_person\" : \"" + fields[22] + "\",
-  \"artefact_was_held_by_collection\" : \"" + awhbc + "\",
-\"culture\" : \"Maya\",
-\"culture_in_aat\" : \"300017826\"
-}"
+#   jsonData = "{
+#   \"artefact_type\" : \"" + fields[14] + "\",
+#   \"artefact_type_in_twkm_database\" : \"" + fields[15] + "\",
+#   \"artefact_in_twkm_database\" : \"" + fields[16] + "\",
+#   \"catalog_no\" : \"" + fields[17] + "\",
+#   \"artefact_publication\" : \"" + fields[18] + "\",
+#   \"artefact_publication_zotero\" : \"" + fields[19] + "\",
+#   \"inventory_no\" : \"" + fields[20] + "\",
+#   \"artefact_is_depicted_by_medium\" : \"" + fields[1] + "\",
+#   \"artefact_was_located_in_place\" : \"" + fields[5] + "\",
+#   \"artefact_originates_from_provenance\" : \"" + fields[9] + "\",
+#   \"artefact_was_documented_by_person\" : \"" + fields[22] + "\",
+#   \"artefact_was_held_by_collection\" : \"" + awhbc + "\",
+# \"culture\" : \"Maya\",
+# \"culture_in_aat\" : \"300017826\"
+# }"
 
-  jsonObj = JSON.parse(jsonData)
-  puts jsonData
+  jsonObj = {
+    'artefact_type' => fields[14],
+    'artefact_type_in_twkm_database' => fields[15],
+    'artefact_in_twkm_database' => fields[16],
+    'catalog_no' => fields[17],
+    'artefact_publication' => fields[18],
+    'artefact_publication_zotero' => fields[19],
+    'inventory_no' => fields[20],
+    'artefact_is_depicted_by_medium' => fields[1],
+    'artefact_was_located_in_place' => fields[5],
+    'artefact_originates_from_provenance' => fields[9],
+    'artefact_was_documented_by_person' => fields[22],
+    'artefact_was_held_by_collection' => awhbc,
+    'culture' => "Maya",
+    'culture_in_aat' => "300017826"
+  }
+
+  # jsonObj = JSON.parse(jsonData)
+  # puts jsonData
 
   work = Entity.new(
     :kind => document,
@@ -225,13 +242,20 @@ document = Kind.where(:name => 'Collection').first
 File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do |line|
   fields = line.split(";")
 
-  jsonData = "{
-\"collection_was_held_by_holder\" : \"" + fields[7] + "\",
-\"collection_held_artefact\" : \"" + fields[13] + "\",
-\"collection_was_located_in_place\" : \"" + fields[5] + "\",
-\"collection_from_where_medium_was_created\" : \"" + fields[1] + "\"}"
-  jsonObj = JSON.parse(jsonData)
-  puts jsonData
+#   jsonData = "{
+# \"collection_was_held_by_holder\" : \"" + fields[7] + "\",
+# \"collection_held_artefact\" : \"" + fields[13] + "\",
+# \"collection_was_located_in_place\" : \"" + fields[5] + "\",
+# \"collection_from_where_medium_was_created\" : \"" + fields[1] + "\"}"
+#   jsonObj = JSON.parse(jsonData)
+#   puts jsonData
+
+  jsonObj = {
+    'collection_was_held_by_holder' => fields[7],
+    'collection_held_artefact' => fields[13],
+    'collection_was_located_in_place' => fields[5],
+    'collection_from_where_medium_was_created' => fields[1]
+  }
 
   work = Entity.new(
     :kind => document,
@@ -256,14 +280,20 @@ document = Kind.where(:name => 'Person').first
 
 File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do |line|
   fields = line.split(";")
-  jsonData = "{
-\"person_created_medium\" : \"" + fields[1] + "\",
-\"person_documented_artefact\" : \"" + fields[13] + "\",
-\"person_visited place\" : \"" + fields[5] + "\"
-}"
 
-  jsonObj = JSON.parse(jsonData)
-  puts jsonData
+#   jsonData = "{
+# \"person_created_medium\" : \"" + fields[1] + "\",
+# \"person_documented_artefact\" : \"" + fields[13] + "\",
+# \"person_visited place\" : \"" + fields[5] + "\"
+# }"
+#   jsonObj = JSON.parse(jsonData)
+#   puts jsonData
+
+  jsonObj = {
+    'person_created_medium' => fields[1],
+    'person_documented_artefact' => fields[13],
+    'person_visited_place' => fields[5]
+  }
 
   work = Entity.new(
     :kind => document,
@@ -297,16 +327,24 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
     plc = fields[23]
   end
 
-  jsonData = "{\"place_in_twkm_database\" : \"" + fields[6] + "\",
- \"place_located_holder\" : \"" + fields[7] + "\",
- \"place_located_artefact\" : \"" + fields[13] + "\",
- \"place_was_visited_by_person\" : \"" + fields[22] + "\",
- \"place_located_collection\" : \"" + plc + "\",
- \"place_where_medium_was_created\" : \"" + fields[1] + "\"
-}"
-
-  jsonObj = JSON.parse(jsonData)
-  puts jsonData
+#   jsonData = "{\"place_in_twkm_database\" : \"" + fields[6] + "\",
+#  \"place_located_holder\" : \"" + fields[7] + "\",
+#  \"place_located_artefact\" : \"" + fields[13] + "\",
+#  \"place_was_visited_by_person\" : \"" + fields[22] + "\",
+#  \"place_located_collection\" : \"" + plc + "\",
+#  \"place_where_medium_was_created\" : \"" + fields[1] + "\"
+# }"
+#   jsonObj = JSON.parse(jsonData)
+#   puts jsonData
+  
+  jsonObj = {
+   'place_in_twkm_database' => fields[6],
+   'place_located_holder' => fields[7],
+   'place_located_artefact' => fields[13],
+   'place_was_visited_by_person' => fields[22],
+   'place_located_collection' => plc,
+   'place_where_medium_was_created' => fields[1]
+  }
 
   # TODO: why not like this?
   # jsonObj = {
@@ -341,14 +379,19 @@ document = Kind.where(:name => 'Provenance').first
 
 File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do |line|
   fields = line.split(";")
-  jsonData = "{
-  \"provenance_in_twkm_website\" : \"" + fields[11] + "\",
-  \"provenance_in_twkm_database\" : \"" + fields[12] + "\",
-  \"provenance_is_origin_of_artefact\" : \"" + fields[13] + "\"
-  }"
 
-  jsonObj = JSON.parse(jsonData)
-  puts jsonData
+  # jsonData = "{
+  # \"provenance_in_twkm_website\" : \"" + fields[11] + "\",
+  # \"provenance_in_twkm_database\" : \"" + fields[12] + "\",
+  # \"provenance_is_origin_of_artefact\" : \"" + fields[13] + "\"
+  # }"
+  # jsonObj = JSON.parse(jsonData)
+  # puts jsonData
+  jsonObj = {
+    'provenance_in_twkm_website' => fields[11],
+    'provenance_in_twkm_database' => fields[12],
+    'provenance_is_origin_of_artefact' => fields[13]
+  }
 
   work = Entity.new(
     :kind => document,
@@ -382,14 +425,18 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
     hhc = fields[23]
   end
 
-  jsonData = "{
-  \"holder_in_twkm_website\" : \"" + fields[8] + "\",
-  \"holder_held_collection\" : \"" + hhc + "\",
-  \"holder_was_located_in_place\" : \"" + fields[5] + "\"
-  }"
-
-  jsonObj = JSON.parse(jsonData)
-  puts jsonData
+  # jsonData = "{
+  # \"holder_in_twkm_website\" : \"" + fields[8] + "\",
+  # \"holder_held_collection\" : \"" + hhc + "\",
+  # \"holder_was_located_in_place\" : \"" + fields[5] + "\"
+  # }"
+  # jsonObj = JSON.parse(jsonData)
+  # puts jsonData
+  jsonData = {
+    'holder_in_twkm_website' => fields[8],
+    'holder_held_collection' => hhc,
+    'holder_was_located_in_place' => fields[5]
+  }
 
   work = Entity.new(
     :kind => document,
