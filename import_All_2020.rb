@@ -151,7 +151,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
     )
 
     if work.valid?
-      p work
+      # p work
       work.save unless SIMULATION
     else
       p work
@@ -210,7 +210,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   )
 
   if work.valid?
-    p work
+    # p work
     work.save unless SIMULATION
   else
     p work
@@ -242,7 +242,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   )
 
   if work.valid?
-    p work
+    # p work
     work.save unless SIMULATION
   else
     p work
@@ -274,7 +274,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   )
 
   if work.valid?
-    p work
+    # p work
     work.save unless SIMULATION
   else
     p work
@@ -327,7 +327,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   )
 
   if work.valid?
-    p work
+    # p work
     work.save unless SIMULATION
   else
     p work
@@ -359,7 +359,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   )
 
   if work.valid?
-    p work
+    # p work
     work.save unless SIMULATION
   else
     p work
@@ -400,7 +400,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   )
 
   if work.valid?
-    p work
+    # p work
     work.save unless SIMULATION
   else
     p work
