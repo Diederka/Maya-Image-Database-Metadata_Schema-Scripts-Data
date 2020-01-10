@@ -54,7 +54,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   #   dimensions = size[1]
   # end
   dimensions = dimensions_for("/home/kor/IMAGESinJPG/" + fields[1] + ".jpg")
-  dimensions = (dimensions ? dimensions[1] : '')
+  dimensions = (dimensions ? dimensions[1].to_s : '')
 
   mwcfc=''
 
@@ -64,42 +64,78 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
     mwcfc = fields[23]
   end
 
-  jsonData = "{\"image_no\" : \"" + fields[1] + "\",
+#   jsonData = "{\"image_no\" : \"" + fields[1] + "\",
 
-\"image_dimensions\" : \"" + dimensions  + "\",
+# \"image_dimensions\" : \"" + dimensions  + "\",
 
-\"image_description\" : \"" + fields[2] + "\",
-\"folder_no\" : \"" + fields[0] + "\",
-\"license\" : \"" + fields[4] + "\",
-\"creator\" : \"" + fields[22] + "\",
-\"date_time_created\" : \"" + fields[3] + "\",
-\"note\" : \"" + fields[21] + "\",
-\"file_name\" : \"" + fields[1] + "\",
+# \"image_description\" : \"" + fields[2] + "\",
+# \"folder_no\" : \"" + fields[0] + "\",
+# \"license\" : \"" + fields[4] + "\",
+# \"creator\" : \"" + fields[22] + "\",
+# \"date_time_created\" : \"" + fields[3] + "\",
+# \"note\" : \"" + fields[21] + "\",
+# \"file_name\" : \"" + fields[1] + "\",
 
-\"contributor\" : \"Project Text Database and Dictionary of Classic Mayan\",
-\"rights_holder\" : \"Karl Herbert Mayer\",
-\"publisher\" : \"Maya Image Archive\",
+# \"contributor\" : \"Project Text Database and Dictionary of Classic Mayan\",
+# \"rights_holder\" : \"Karl Herbert Mayer\",
+# \"publisher\" : \"Maya Image Archive\",
 
-\"source_type\" : \"Filmstrip\",
-\"source_x_dimension_unit\" : \"mm\",
-\"source_y_dimension_unit\" : \"mm\",
-\"master_image_file_type\" : \"Tiff\",
+# \"source_type\" : \"Filmstrip\",
+# \"source_x_dimension_unit\" : \"mm\",
+# \"source_y_dimension_unit\" : \"mm\",
+# \"master_image_file_type\" : \"Tiff\",
 
-\"digitized_by\" : \"Project Text Database and Dictionary of Classic Mayan\",
-\"date_of_digitization\" : \"2017\",
-\"color_space\" : \"RGB\",
-\"scanner_model_number\" : \"5000\",
-\"scanner_model_name\" : \"Nikon Coolscan 5000 ED\",
-\"scanning_software_name\" : \"HDR SilverFast Soft\",
-\"scanning_software_version_no\" : \"HDR SilverFast Soft\",
+# \"digitized_by\" : \"Project Text Database and Dictionary of Classic Mayan\",
+# \"date_of_digitization\" : \"2017\",
+# \"color_space\" : \"RGB\",
+# \"scanner_model_number\" : \"5000\",
+# \"scanner_model_name\" : \"Nikon Coolscan 5000 ED\",
+# \"scanning_software_name\" : \"HDR SilverFast Soft\",
+# \"scanning_software_version_no\" : \"HDR SilverFast Soft\",
 
-\"medium_depicts_artefact\" : \"" + fields[13] + "\",
-\"medium_was_created_by_person\" : \"" + fields[22] + "\",
-\"medium_was_created_from_collection\" : \"" + mwcfc + "\",
-\"medium_was_created_at_place\" : \"" + fields[5] + "\"}"
+# \"medium_depicts_artefact\" : \"" + fields[13] + "\",
+# \"medium_was_created_by_person\" : \"" + fields[22] + "\",
+# \"medium_was_created_from_collection\" : \"" + mwcfc + "\",
+# \"medium_was_created_at_place\" : \"" + fields[5] + "\"}"
 
-  jsonObj = JSON.parse(jsonData)
-  puts jsonData
+#   jsonObj = JSON.parse(jsonData)
+  # puts jsonData
+
+  jsonObj = {
+    'image_no' => fields[1],
+
+    'image_dimensions' => dimensions,
+
+    'image_description' => fields[2],
+    'folder_no' => fields[0],
+    'license' => fields[4],
+    'creator' => fields[22],
+    'date_time_created' => fields[3],
+    'note' => fields[21],
+    'file_name' => fields[1],
+
+    'contributor' => "Project Text Database and Dictionary of Classic Mayan",
+    'rights_holder' => "Karl Herbert Mayer",
+    'publisher' => "Maya Image Archive",
+
+    'source_type' => "Filmstrip",
+    'source_x_dimension_unit' => "mm",
+    'source_y_dimension_unit' => "mm",
+    'master_image_file_type' => "Tiff",
+
+    'digitized_by' => "Project Text Database and Dictionary of Classic Mayan",
+    'date_of_digitization' => "2017",
+    'color_space' => "RGB",
+    'scanner_model_number' => "5000",
+    'scanner_model_name' => "Nikon Coolscan 5000 ED",
+    'scanning_software_name' => "HDR SilverFast Soft",
+    'scanning_software_version_no' => "HDR SilverFast Soft",
+
+    'medium_depicts_artefact' => fields[13],
+    'medium_was_created_by_person' => fields[22],
+    'medium_was_created_from_collection' => mwcfc,
+    'medium_was_created_at_place' => fields[5]
+  }
 
   if(File.file?("/home/kor/IMAGESinJPG/" + fields[1] + ".jpg"))
     
