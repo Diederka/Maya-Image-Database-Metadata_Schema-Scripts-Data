@@ -144,11 +144,12 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
       :medium => Medium.new(document: File.open("/home/kor/IMAGESinJPG/" + fields[1] + ".jpg")),
       :collection => default,
       :dataset => jsonObj,
-      :distinct_name => fields[1],
-      :datings => [
-        EntityDating.new(label: "Year", dating_string: fields[3])
-      ]
+      :distinct_name => fields[1]
     )
+
+    if fields[3].present?
+      work.datings << EntityDating.new(label: 'Year', datings_string: fields[3])
+    end
 
     if work.valid?
       # p work
@@ -221,7 +222,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   work = Entity.new(
     :kind => document,
     :collection => default,
-    :name => fields[13],
+    :name => fields[13].gsub(/ {2,}/, ' '),
   # :distinct_name => fields[],
     :dataset => jsonObj
   )
@@ -260,7 +261,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   work = Entity.new(
     :kind => document,
     :collection => default,
-    :name => fields[23],
+    :name => fields[23].gsub(/ {2,}/, ' '),
   # :distinct_name => fields[],
     :dataset => jsonObj
   )
@@ -298,7 +299,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   work = Entity.new(
     :kind => document,
     :collection => default,
-    :name => fields[22],
+    :name => fields[22].gsub(/ {2,}/, ' '),
    #:distinct_name => fields[],
     :dataset => jsonObj
   )
@@ -359,7 +360,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   work = Entity.new(
     :kind => document,
     :collection => default,
-    :name => fields[5],
+    :name => fields[5].gsub(/ {2,}/, ' '),
   # :distinct_name => fields[],
     :dataset => jsonObj
   )
@@ -396,7 +397,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   work = Entity.new(
     :kind => document,
     :collection => default,
-    :name => fields[9],
+    :name => fields[9].gsub(/ {2,}/, ' '),
     :distinct_name => fields[10],
     :dataset => jsonObj
   )
@@ -441,7 +442,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   work = Entity.new(
     :kind => document,
     :collection => default,
-    :name => fields[7],
+    :name => fields[7].gsub(/ {2,}/, ' '),
  # :distinct_name => fields[],
     :dataset => jsonObj
   )
