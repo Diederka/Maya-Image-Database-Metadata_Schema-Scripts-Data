@@ -148,7 +148,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
     )
 
     if fields[3].present?
-      work.datings << EntityDating.new(label: 'Year', datings_string: fields[3])
+      work.datings << EntityDating.new(label: 'Year', dating_string: fields[3])
     end
 
     if work.valid?
@@ -261,7 +261,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   work = Entity.new(
     :kind => document,
     :collection => default,
-    :name => fields[23].gsub(/ {2,}/, ' '),
+    :name => (fields[23] || '').gsub(/ {2,}/, ' '),
   # :distinct_name => fields[],
     :dataset => jsonObj
   )
@@ -433,7 +433,7 @@ File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do 
   # }"
   # jsonObj = JSON.parse(jsonData)
   # puts jsonData
-  jsonData = {
+  jsonObj = {
     'holder_in_twkm_website' => fields[8],
     'holder_held_collection' => hhc,
     'holder_was_located_in_place' => fields[5]
