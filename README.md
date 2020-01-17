@@ -12,6 +12,16 @@ Also an example-cvs is given which contains the respective colums that are impor
 
 Also informations about our OAI-API are given here (see archive). 
 
+## General
+
+Please run all scripts from within the ConedaKOR installation directory, so
+e.g.:
+
+~~~bash
+cd /home/kor/kor
+ruby /home/kor/scripts.git/import_All_2020.rb
+~~~
+
 ## Taking snaphots (snapshot.sh)
 
 Configuration happens within the `.env` file, see `.env.example` for a template
