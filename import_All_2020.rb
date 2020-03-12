@@ -47,7 +47,7 @@ if DO_ENTITIES
   imageNotFound = []
 
   # data ingest via excel (and static values)
-  File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do |line|
+  File.read(ENV['CSV_FILE']).split("\n")[1..-1].each do |line|
     fields = line.split(";")
 
     # size=[]
@@ -61,7 +61,7 @@ if DO_ENTITIES
     # if size.length > 0
     #   dimensions = size[1]
     # end
-    dimensions = dimensions_for("/home/kor/IMAGESinJPG/" + fields[1] + ".jpg")
+    dimensions = dimensions_for(ENV['IMAGES_DIR'] + '/' + fields[1] + ".jpg")
     dimensions = (dimensions ? dimensions[1].to_s : '')
 
     mwcfc=''
@@ -145,11 +145,11 @@ if DO_ENTITIES
       'medium_was_created_at_place' => fields[5]
     }
 
-    if(File.file?("/home/kor/IMAGESinJPG/" + fields[1] + ".jpg"))
+    if(File.file?(ENV['IMAGES_DIR'] + '/' + fields[1] + ".jpg"))
       
       work = Entity.new(
         :kind => document,
-        :medium => Medium.new(document: File.open("/home/kor/IMAGESinJPG/" + fields[1] + ".jpg")),
+        :medium => Medium.new(document: File.open(ENV['IMAGES_DIR'] + '/' + fields[1] + ".jpg")),
         :collection => default,
         :dataset => jsonObj,
         :distinct_name => fields[1]
@@ -180,7 +180,7 @@ if DO_ENTITIES
   default = Collection.where(:name => 'Guest Collection').first
   document = Kind.where(:name => 'Artefact').first
 
-  File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do |line|
+  File.read(ENV['CSV_FILE']).split("\n")[1..-1].each do |line|
     fields = line.split(";")
 
     awhbc=''
@@ -248,7 +248,7 @@ if DO_ENTITIES
   default = Collection.where(:name => 'Guest Collection').first
   document = Kind.where(:name => 'Collection').first
 
-  File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do |line|
+  File.read(ENV['CSV_FILE']).split("\n")[1..-1].each do |line|
     fields = line.split(";")
 
   #   jsonData = "{
@@ -287,7 +287,7 @@ if DO_ENTITIES
   default = Collection.where(:name => 'Guest Collection').first
   document = Kind.where(:name => 'Person').first
 
-  File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do |line|
+  File.read(ENV['CSV_FILE']).split("\n")[1..-1].each do |line|
     fields = line.split(";")
 
   #   jsonData = "{
@@ -325,7 +325,7 @@ if DO_ENTITIES
   default = Collection.where(:name => 'Guest Collection').first
   document = Kind.where(:name => 'Place').first
 
-  File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do |line|
+  File.read(ENV['CSV_FILE']).split("\n")[1..-1].each do |line|
     fields = line.split(";")
     puts fields[24]
 
@@ -386,7 +386,7 @@ if DO_ENTITIES
   default = Collection.where(:name => 'Guest Collection').first
   document = Kind.where(:name => 'Provenance').first
 
-  File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do |line|
+  File.read(ENV['CSV_FILE']).split("\n")[1..-1].each do |line|
     fields = line.split(";")
 
     # jsonData = "{
@@ -424,7 +424,7 @@ if DO_ENTITIES
   default = Collection.where(:name => 'Guest Collection').first
   document = Kind.where(:name => 'Holder').first
 
-  File.read("/home/kor/sourceFiles/source_import.csv").split("\n")[1..-1].each do |line|
+  File.read(ENV['CSV_FILE']).split("\n")[1..-1].each do |line|
     fields = line.split(";")
 
     hhc=''
