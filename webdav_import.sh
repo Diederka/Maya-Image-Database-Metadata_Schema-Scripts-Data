@@ -4,30 +4,30 @@ ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $ROOT/.env
 
 RUBY="/usr/local/rvm/wrappers/ruby-2.5.7/ruby"
-TS=$(date +'%Y%M%D_%H%M%S')
-WEBDAV="/home/kor/SHARED/webdav"
+TS=$(date +'%Y%m%d_%H%M%S')
+WEBDAV="/home/kor/kor/webdav"
 CURRENT="$WEBDAV/archive/$TS"
 
 # make sure no previous run is active
-if ! -f $WEBDAV/done.txt ; then
-  echo 'a previous run has not finished yet' >> $CURRENT/log.txt
+if ! test -f $WEBDAV/done.txt ; then
+  echo 'a previous run has not finished yet'
   exit 1
 fi
 rm $WEBDAV/done.txt
 
 # prepare directories
 mkdir -p $WEBDAV/archive
-mv $WEBDAV/new $CURRENT
+mv $WEBDAV/new $CURRENT || mkdir $CURRENT
 mkdir -p $WEBDAV/new
 sudo chown apache. $WEBDAV/new
 sudo chown kor. $CURRENT
 
 # some checks
-if ! -f $CURRENT/data.csv ; then
+if ! test -f $CURRENT/data.csv ; then
   echo "$CURRENT/data.csv couldn't be found" >> $CURRENT/log.txt
   exit 1
 fi
-if ! -d $CURRENT/images ; then
+if ! test -d $CURRENT/images ; then
   echo "$CURRENT/images couldn't be found" >> $CURRENT/log.txt
   exit 1
 fi
@@ -42,7 +42,7 @@ export CSV_FILE="$CURRENT/data.csv"
 /home/kor/scripts.git/snapshot.sh &>> $CURRENT/log.txt
 
 # run the import
-sudo -u kor $RUBY $ROOT/import_ALL_2020.rb &>> $CURRENT/log.txt
+$RUBY $ROOT/import_ALL_2020.rb &>> $CURRENT/log.txt
 
 # clean up
-sudo -u kor touch $WEBDAV/done.txt
+touch $WEBDAV/done.txt
