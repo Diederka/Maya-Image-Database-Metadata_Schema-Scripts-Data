@@ -1,13 +1,20 @@
 #!/bin/bash -e
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-TS=$(date +'%Y%M%D_%H%M%S')
-RUBY="/usr/local/rvm/rubies/ruby-2.5.7/bin/ruby"
 
-# prepare directories
+RUBY="/usr/local/rvm/rubies/ruby-2.5.7/bin/ruby"
+TS=$(date +'%Y%M%D_%H%M%S')
 WEBDAV="/home/kor/SHARED/webdav"
 CURRENT="$WEBDAV/archive/$TS"
+
+# make sure no previous run is active
+if ! -f $WEBDAV/done.txt ; then
+  echo 'a previous run has not finished yet'
+  exit 1
+fi
 rm $WEBDAV/done.txt
+
+# prepare directories
 mkdir -p $WEBDAV/archive
 mv $WEBDAV/new $CURRENT
 mkdir -p $WEBDAV/new
