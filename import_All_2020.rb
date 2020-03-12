@@ -6,14 +6,14 @@
 
 ############################## Import all Entities #####################################
 # the ConedaKOR installation directory
-KOR_ROOT="/home/kor/kor"
+KOR_ROOT = ENV['KOR_ROOT']
 
 # if set to `true`, only a simulation is run and no data is changed
-SIMULATION=true
+SIMULATION = (ENV['SIMULATION'] || '').strip == 'true'
 
 # if set to `true`, skips the first part (importing new entities) and just
 # handles the relationships
-DO_ENTITIES=true
+DO_ENTITIES = (ENV['DO_ENTITIES'] || '').strip == 'true'
 
 puts "SIMULATION MODE" if SIMULATION
 
