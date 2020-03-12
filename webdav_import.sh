@@ -1,8 +1,9 @@
 #!/bin/bash -e
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $ROOT/.env
 
-RUBY="/usr/local/rvm/rubies/ruby-2.5.7/bin/ruby"
+RUBY="/usr/local/rvm/wrappers/ruby-2.5.7/ruby"
 TS=$(date +'%Y%M%D_%H%M%S')
 WEBDAV="/home/kor/SHARED/webdav"
 CURRENT="$WEBDAV/archive/$TS"
@@ -32,7 +33,6 @@ if ! -d $CURRENT/images ; then
 fi
 
 # set parameters for import script
-export KOR_ROOT="/home/kor/kor"
 export SIMULATION="true"
 export DO_ENTITIES="true"
 export IMAGES_DIR="$CURRENT/images"

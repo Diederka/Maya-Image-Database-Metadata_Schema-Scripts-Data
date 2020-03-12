@@ -13,7 +13,7 @@ echo "creating backup in $TARGET"
 
 mkdir -p $TARGET
 mysqldump -u root -p"$MYSQL_PASSWORD" kor_production | gzip -c > $TARGET/dump.sql.gz
-rsync -a $KOR_ROOT/SHARED/ $TARGET/shared/
+rsync -a $KOR_SHARED/ $TARGET/shared/
 
 # sudo systemctl start httpd
 
