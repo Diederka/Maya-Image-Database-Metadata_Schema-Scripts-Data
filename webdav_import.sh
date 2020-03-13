@@ -42,7 +42,7 @@ export CSV_FILE="$CURRENT/data.csv"
 /home/kor/scripts.git/snapshot.sh &>> $CURRENT/log.txt
 
 # run the import
-$RUBY $ROOT/import_ALL_2020.rb &>> $CURRENT/log.txt
+$RUBY $ROOT/import_All_2020.rb &>> $CURRENT/log.txt
 
 # clean up
 touch $WEBDAV/done.txt

@@ -33,6 +33,16 @@ def dimensions_for(path)
   status == 0 ? r.read.split('x').map{|e| e.to_i} : nil
 end
 
+# read csv file ensuring an array of lines (even if empty or if the file doesn't
+# exist)
+# @param path [String] the path to the csv file
+# @return [Array<String>] an array with each line of data from the csv file
+def read_csv(path)
+  return [] unless File.exists?(path)
+
+  File.read(path).split("\n")[1..-1] || []
+end
+
 # loading the rails environment
 
 require "#{KOR_ROOT}/config/environment"
@@ -47,7 +57,7 @@ if DO_ENTITIES
   imageNotFound = []
 
   # data ingest via excel (and static values)
-  File.read(ENV['CSV_FILE']).split("\n")[1..-1].each do |line|
+  read_csv(ENV['CSV_FILE']).each do |line|
     fields = line.split(";")
 
     # size=[]
@@ -180,7 +190,7 @@ if DO_ENTITIES
   default = Collection.where(:name => 'Guest Collection').first
   document = Kind.where(:name => 'Artefact').first
 
-  File.read(ENV['CSV_FILE']).split("\n")[1..-1].each do |line|
+  read_csv(ENV['CSV_FILE']).each do |line|
     fields = line.split(";")
 
     awhbc=''
@@ -248,7 +258,7 @@ if DO_ENTITIES
   default = Collection.where(:name => 'Guest Collection').first
   document = Kind.where(:name => 'Collection').first
 
-  File.read(ENV['CSV_FILE']).split("\n")[1..-1].each do |line|
+  read_csv(ENV['CSV_FILE']).each do |line|
     fields = line.split(";")
 
   #   jsonData = "{
@@ -287,7 +297,7 @@ if DO_ENTITIES
   default = Collection.where(:name => 'Guest Collection').first
   document = Kind.where(:name => 'Person').first
 
-  File.read(ENV['CSV_FILE']).split("\n")[1..-1].each do |line|
+  read_csv(ENV['CSV_FILE']).each do |line|
     fields = line.split(";")
 
   #   jsonData = "{
@@ -325,7 +335,7 @@ if DO_ENTITIES
   default = Collection.where(:name => 'Guest Collection').first
   document = Kind.where(:name => 'Place').first
 
-  File.read(ENV['CSV_FILE']).split("\n")[1..-1].each do |line|
+  read_csv(ENV['CSV_FILE']).each do |line|
     fields = line.split(";")
     puts fields[24]
 
@@ -386,7 +396,7 @@ if DO_ENTITIES
   default = Collection.where(:name => 'Guest Collection').first
   document = Kind.where(:name => 'Provenance').first
 
-  File.read(ENV['CSV_FILE']).split("\n")[1..-1].each do |line|
+  read_csv(ENV['CSV_FILE']).each do |line|
     fields = line.split(";")
 
     # jsonData = "{
@@ -424,7 +434,7 @@ if DO_ENTITIES
   default = Collection.where(:name => 'Guest Collection').first
   document = Kind.where(:name => 'Holder').first
 
-  File.read(ENV['CSV_FILE']).split("\n")[1..-1].each do |line|
+  read_csv(ENV['CSV_FILE']).each do |line|
     fields = line.split(";")
 
     hhc=''
