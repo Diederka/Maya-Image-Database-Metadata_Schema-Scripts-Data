@@ -33,7 +33,7 @@ if ! test -d $CURRENT/images ; then
 fi
 
 # set parameters for import script
-export SIMULATION="true"
+export SIMULATION="false"
 export DO_ENTITIES="true"
 export IMAGES_DIR="$CURRENT/images"
 export CSV_FILE="$CURRENT/data.csv"
