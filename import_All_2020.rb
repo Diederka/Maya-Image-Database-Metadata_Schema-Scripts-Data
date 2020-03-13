@@ -133,21 +133,13 @@ if DO_ENTITIES
       'file_name' => fields[1],
 
       'contributor' => "Project Text Database and Dictionary of Classic Mayan",
-      'rights_holder' => "Karl Herbert Mayer",
+      'rights_holder' => fields[22],
       'publisher' => "Maya Image Archive",
 
-      'source_type' => "Filmstrip",
       'source_x_dimension_unit' => "mm",
       'source_y_dimension_unit' => "mm",
-      'master_image_file_type' => "Tiff",
 
-      'digitized_by' => "Project Text Database and Dictionary of Classic Mayan",
-      'date_of_digitization' => "2017",
-      'color_space' => "RGB",
-      'scanner_model_number' => "5000",
-      'scanner_model_name' => "Nikon Coolscan 5000 ED",
-      'scanning_software_name' => "HDR SilverFast Soft",
-      'scanning_software_version_no' => "HDR SilverFast Soft",
+      'digitized_by' => "Proyecto Arqueológico Uxul (PAU)",
 
       'medium_depicts_artefact' => fields[13],
       'medium_was_created_by_person' => fields[22],
