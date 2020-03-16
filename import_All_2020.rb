@@ -177,7 +177,7 @@ if DO_ENTITIES
         p work.errors.full_messages
       end
     else
-      puts "Bilddatei nicht gefunden"
+      puts "Bilddatei nicht gefunden: #{fields[1]}"
       imageNotFound << fields[1]
     end
   end
