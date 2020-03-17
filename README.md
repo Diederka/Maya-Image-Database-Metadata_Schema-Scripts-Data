@@ -32,6 +32,8 @@ This, do the following:
 * upload a file `data.csv` to the `new` folder
 * upload a directory with images as `images` to the `new` folder
 * to trigger the import, upload an empty file `start.txt` to the `new` folder
+  (IMPORTANT: do not upload this together with the data and images because it
+  could be uploaded first, triggering the import without the data)
 
 The process will then import this data like this:
 

@@ -23,6 +23,7 @@ puts "SIMULATION MODE" if SIMULATION
 # @param path [String] the path to the file
 # @return [Integer, Integer] the image dimensions
 def dimensions_for(path)
+  return nil if path.nil?
   return nil unless File.file?(path)
 
   r, w = IO.pipe
@@ -48,7 +49,7 @@ end
 # @param path [String] the case insensitive path to be verified
 # @return [String] the case sensitive path found if it exists
 # @return [nil] if the file couldn't be found
-def ci_image(path)
+def cs_image(path)
   Dir[ENV['IMAGES_DIR'] + '/*'].find do |candidate|
     if candidate.downcase == path
       return candidate
@@ -86,7 +87,8 @@ if DO_ENTITIES
     # if size.length > 0
     #   dimensions = size[1]
     # end
-    image_path = ci_image(ENV['IMAGES_DIR'] + '/' + fields[1] + ".jpg")
+    ci_image_path = ENV['IMAGES_DIR'] + '/' + fields[1] + ".jpg"
+    image_path = cs_image(ci_image_path)
     dimensions = dimensions_for(image_path)
     dimensions = (dimensions ? dimensions[1].to_s : '')
 
@@ -163,7 +165,7 @@ if DO_ENTITIES
       'medium_was_created_at_place' => fields[5]
     }
 
-    if File.file?(image_path)
+    if !image_path.nil? && File.file?(image_path)
       
       work = Entity.new(
         :kind => document,
@@ -185,7 +187,7 @@ if DO_ENTITIES
         p work.errors.full_messages
       end
     else
-      puts "Bilddatei nicht gefunden: #{image_path}"
+      puts "Bilddatei nicht gefunden: #{ci_image_path}"
       imageNotFound << fields[1]
     end
   end
