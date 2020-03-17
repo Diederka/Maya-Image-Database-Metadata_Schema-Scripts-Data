@@ -43,6 +43,21 @@ def read_csv(path)
   File.read(path).split("\n")[1..-1] || []
 end
 
+# returns the case sensitive version for a case insensitive image path if the
+# path can be found in the file system
+# @param path [String] the case insensitive path to be verified
+# @return [String] the case sensitive path found if it exists
+# @return [nil] if the file couldn't be found
+def ci_image(path)
+  Dir[ENV['IMAGES_DIR'] + '/*'].find do |candidate|
+    if candidate.downcase == path
+      return candidate
+    end
+  end
+
+  nil
+end
+
 # loading the rails environment
 
 require "#{KOR_ROOT}/config/environment"
@@ -71,7 +86,8 @@ if DO_ENTITIES
     # if size.length > 0
     #   dimensions = size[1]
     # end
-    dimensions = dimensions_for(ENV['IMAGES_DIR'] + '/' + fields[1] + ".jpg")
+    image_path = ci_image(ENV['IMAGES_DIR'] + '/' + fields[1] + ".jpg")
+    dimensions = dimensions_for(image_path)
     dimensions = (dimensions ? dimensions[1].to_s : '')
 
     mwcfc=''
@@ -147,11 +163,11 @@ if DO_ENTITIES
       'medium_was_created_at_place' => fields[5]
     }
 
-    if(File.file?(ENV['IMAGES_DIR'] + '/' + fields[1] + ".jpg"))
+    if File.file?(image_path)
       
       work = Entity.new(
         :kind => document,
-        :medium => Medium.new(document: File.open(ENV['IMAGES_DIR'] + '/' + fields[1] + ".jpg")),
+        :medium => Medium.new(document: File.open(image_path)),
         :collection => default,
         :dataset => jsonObj,
         :distinct_name => fields[1]
@@ -169,7 +185,7 @@ if DO_ENTITIES
         p work.errors.full_messages
       end
     else
-      puts "Bilddatei nicht gefunden: #{fields[1]}"
+      puts "Bilddatei nicht gefunden: #{image_path}"
       imageNotFound << fields[1]
     end
   end

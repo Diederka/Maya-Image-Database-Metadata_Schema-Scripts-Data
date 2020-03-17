@@ -40,6 +40,7 @@ The process will then import this data like this:
   folder
 * the `import_All_2020.rb` script is run on the moved data
 * a log file `log.txt` is created within the timestamp directory
+* when finished, the process creates the file done.txt in the webdav root folder
 
 ## Taking snaphots (snapshot.sh)
 
