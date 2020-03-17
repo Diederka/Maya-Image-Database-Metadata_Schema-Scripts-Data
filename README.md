@@ -53,6 +53,37 @@ Run the script with `./snapshot.sh` which will create a directory for the
 current timestamp within the snapshots directory. Taking a snapshot can take
 some time.
 
+## Restoring snapshots
+
+Before you do this, it might be a good idea to create another snapshot, see
+above.
+
+Snapshots are saved in `/home/kor/backups`. Each subdirectory represents one
+snapshot. Choose a snapshot to restore and then (we will use 20200313_003812
+as example here):
+
+~~~bash
+# stop the bg process
+cd /home/kor/kor
+RAILS_ENV=production bundle exec bin/delayed_job stop
+
+cd /home/kor
+# this will take a couple of minutes
+cp -a backups/20200313_003812/SHARED ./SHARED.snapshot
+sudo systemctl stop httpd
+# this will ask for a password, you can find it in SHARED/database.yml
+zcat backups/20200313_003812/dump.sql.gz | mysql -u kor -p kor_production
+sudo systemctl start httpd
+
+# start the bg process
+cd /home/kor/kor
+RAILS_ENV=production bundle exec bin/delayed_job start
+
+# refresh the index
+cd /home/kor/kor
+RAILS_ENV=production bundle exec bin/kor index-all
+~~~
+
 ## Importing from CSV (import_All_2020.rb)
 
 Data is imported from `/home/kor/sourceFiles/source_import.csv` which is a 

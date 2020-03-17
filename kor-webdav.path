@@ -2,7 +2,7 @@
 Description=Description=import data from a public webdav to ConedaKOR (path trigger)
 
 [Path]
-PathExists=/home/kor/SHARED/webdav/new/start.txt
+PathExists=/home/kor/webdav/new/start.txt
 Unit=kor-webdav.service
 
 [Install]
