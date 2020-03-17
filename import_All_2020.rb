@@ -51,7 +51,7 @@ end
 # @return [nil] if the file couldn't be found
 def cs_image(path)
   Dir[ENV['IMAGES_DIR'] + '/*'].find do |candidate|
-    if candidate.downcase == path
+    if candidate.downcase == path.downcase
       return candidate
     end
   end
