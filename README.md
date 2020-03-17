@@ -22,6 +22,25 @@ cd /home/kor/kor
 ruby /home/kor/scripts.git/import_All_2020.rb
 ~~~
 
+## Autoupload via Webdav
+
+The steps below can be automated without a SSH session to the server. To trigger
+This, do the following:
+
+* login to davs://classicmayan.kor.de.dariah.eu/webdav with your Webdav client
+  using your credentials
+* upload a file `data.csv` to the `new` folder
+* upload a directory with images as `images` to the `new` folder
+* to trigger the import, upload an empty file `start.txt` to the `new` folder
+
+The process will then import this data like this:
+
+* a ConedaKOR snapshot is created
+* your uploaded data is moved to a timestamp directory within the `archive`
+  folder
+* the `import_All_2020.rb` script is run on the moved data
+* a log file `log.txt` is created within the timestamp directory
+
 ## Taking snaphots (snapshot.sh)
 
 Configuration happens within the `.env` file, see `.env.example` for a template
