@@ -44,6 +44,17 @@ The process will then import this data like this:
 * a log file `log.txt` is created within the timestamp directory
 * when finished, the process creates the file done.txt in the webdav root folder
 
+Note: This repository contains the systemd units to trigger the script when the
+`start.txt` file is created. These were activated like this:
+
+~~~bash
+sudo systemctl link /home/kor/scripts.git/kor-webdav.service
+sudo systemctl enable /home/kor/scripts.git/kor-webdav.path
+~~~
+
+The latter command complains about a missing `Install` section but activates
+the unit anyhow.
+
 ## Taking snaphots (snapshot.sh)
 
 Configuration happens within the `.env` file, see `.env.example` for a template
