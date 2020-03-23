@@ -22,6 +22,16 @@ cd /home/kor/kor
 ruby /home/kor/scripts.git/import_All_2020.rb
 ~~~
 
+## How to change this code
+
+Make changes to the scripts as needed, then commit and push them to github.
+Then make sure to pull those changes to the production server:
+
+~~~bash
+cd /home/kor/scripts.git
+git pull
+~~~
+
 ## Autoupload via Webdav
 
 The steps below can be automated without a SSH session to the server. To trigger
