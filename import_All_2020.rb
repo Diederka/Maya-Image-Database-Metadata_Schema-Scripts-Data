@@ -153,11 +153,10 @@ if DO_ENTITIES
       'contributor' => "Project Text Database and Dictionary of Classic Mayan",
       'rights_holder' => fields[22],
       'publisher' => "Maya Image Archive",
+      'digitized_by' => fields[24],
 
       'source_x_dimension_unit' => "mm",
       'source_y_dimension_unit' => "mm",
-
-      'digitized_by' => "Proyecto Arqueológico Uxul (PAU)",
 
       'medium_depicts_artefact' => fields[13],
       'medium_was_created_by_person' => fields[22],
