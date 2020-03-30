@@ -43,7 +43,9 @@ data = read_cache
 
 puts 'matching EXIF data to media ...'
 Entity.media.includes(:medium).each do |entity|
-  file_name = entity.medium.image.original_filename
+  file_name = 
+    entity.dataset['file_name'].presence ||
+    entity.medium.image.original_filename
   exif = data[entity.id]
 
   # this holds the changes to be applied to this entity's dataset
