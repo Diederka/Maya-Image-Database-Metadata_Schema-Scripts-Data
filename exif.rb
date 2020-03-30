@@ -14,7 +14,7 @@ end
 def read_cache
   puts 'reading EXIF cache ...'
   results = {}
-  Dir['../cache/exif/*.json'].each do |f|
+  Dir["#{ENV['EXIF_CACHE']}/*.json"].each do |f|
     id = f.split('/').last.split('.').first.to_i
     results[id] = JSON.load(File.read f)
   end
@@ -22,11 +22,10 @@ def read_cache
 end
 
 def fill_cache
-  puts 'caching EXIF data for all images ...'
   scope = Entity.media.includes(:medium)
   pb = Kor.progress_bar 'parsing exif', scope.count
   scope.find_each do |entity|
-    cache_file = "exif/#{entity.id}.json"
+    cache_file = "#{ENV['EXIF_CACHE']}/#{entity.id}.json"
     unless File.exists?(cache_file)
       path = entity.medium.path(:original)
       data = exif_for(path)
@@ -38,37 +37,39 @@ def fill_cache
   end
 end
 
-#fill_cache
+fill_cache
 data = read_cache
-binding.pry
+# binding.pry
 
 puts 'matching EXIF data to media ...'
 Entity.media.includes(:medium).each do |entity|
-  file_name = File.basename(entity.medium.path(:original))
+  file_name = entity.medium.image.original_filename
   exif = data[entity.id]
 
   # this holds the changes to be applied to this entity's dataset
   new_dataset = {}
 
   # do this for all images
-  mapping = {
-    'ColorSpaceData' => 'color_space',
-    'FileName' => 'file_name',
-    'xResolution' => 'maximum_optical_resolution',
-    'ImageWidth' => 'source_x_dimension_value',
-    'ExifImageWidth' => 'source_x_dimension_value',
-    'ImageHeight' => 'source_y_dimension_value',
-    'ExifImageHeight' => 'source_y_dimension_value',
-    'Make' => 'digital_camera_manufacturer',
-    'Model' => 'digital_camera_model_name'
-  }
-  mapping.each do |from, to|
-    if exif[from].present? && !entity.dataset[to].present? && !new_dataset[to].present?
-      new_dataset[to] = exif[from]
+  if exif # but only if we found any exif data
+    mapping = {
+      'ColorSpaceData' => 'color_space',
+      'FileName' => 'file_name',
+      'xResolution' => 'maximum_optical_resolution',
+      'ImageWidth' => 'source_x_dimension_value',
+      'ExifImageWidth' => 'source_x_dimension_value',
+      'ImageHeight' => 'source_y_dimension_value',
+      'ExifImageHeight' => 'source_y_dimension_value',
+      'Make' => 'digital_camera_manufacturer',
+      'Model' => 'digital_camera_model_name'
+    }
+    mapping.each do |from, to|
+      if exif[from].present? && !entity.dataset[to].present? && !new_dataset[to].present?
+        new_dataset[to] = exif[from]
+      end
     end
   end
 
-  # do this only for images starting with 'MET_'
+  # do this only for images starting with 'MET_', even if there was no exif data
   if file_name.match?(/^MET_/)
     mapping = {
       'rights_holder' => 'Public Domain',
@@ -83,14 +84,16 @@ Entity.media.includes(:medium).each do |entity|
   end
 
   # do this only for images NOT starting with 'MET_', 'KHM_', 'NG_' or 'PAU_'
-  if !file_name.match?(/^(MET|KHM|NG|PAU)_/)
-    mapping = {
-      'Copyright' => 'rights_holder',
-      'CreationDate' => 'date_time_created'
-    }
-    mapping.each do |from, to|
-      if exif[from].present? && !entity.dataset[to].present? && !new_dataset[to].present?
-        new_dataset[to] = exif[from]
+  if exif # but only if there is exif data
+    if !file_name.match?(/^(MET|KHM|NG|PAU)_/)
+      mapping = {
+        'Copyright' => 'rights_holder',
+        'CreationDate' => 'date_time_created'
+      }
+      mapping.each do |from, to|
+        if exif[from].present? && !entity.dataset[to].present? && !new_dataset[to].present?
+          new_dataset[to] = exif[from]
+        end
       end
     end
   end
