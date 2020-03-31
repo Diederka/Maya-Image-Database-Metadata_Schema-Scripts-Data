@@ -7,8 +7,15 @@ Dotenv.load
 require "#{ENV['KOR_ROOT']}/config/environment"
 
 def exif_for(path)
-  output = `#{ENV['EXIFTOOL']} -j #{path}`
-  JSON.parse(output)[0]
+  output = `#{ENV['EXIFTOOL']} -j "#{path}"`
+  data = JSON.parse(output)[0]
+  if data['FileName'] == 'image.jpg'
+    data.delete 'FileName'
+  end
+  data
+rescue JSON::ParserError => e
+  p e
+  {}
 end
 
 def read_cache
@@ -87,7 +94,7 @@ Entity.media.includes(:medium).each do |entity|
 
   # do this only for images NOT starting with 'MET_', 'KHM_', 'NG_' or 'PAU_'
   if exif # but only if there is exif data
-    if !file_name.match?(/^(MET|KHM|NG|PAU)_/)
+    if !file_name.match?(/^(KHM|NG|PAU)_/)
       mapping = {
         'Copyright' => 'rights_holder',
         'CreationDate' => 'date_time_created'
@@ -98,6 +105,13 @@ Entity.media.includes(:medium).each do |entity|
         end
       end
     end
+  end
+
+  # we ensure that the best file_name we have is used in for the dataset field
+  # 'file_name' if that isn't set already
+  if !entity.dataset['file_name'].present? && !new_dataset['file_name'].present?
+    #binding.pry
+    new_dataset['file_name'] = file_name
   end
 
   unless new_dataset.empty?
