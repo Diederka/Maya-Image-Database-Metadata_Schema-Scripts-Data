@@ -1,10 +1,11 @@
 #!/usr/bin/env ruby
 
+# load debugger, .env and KOR
 require 'pry'
 require 'dotenv'
 Dotenv.load
-
 require "#{ENV['KOR_ROOT']}/config/environment"
+# ---
 
 def exif_for(path)
   output = `#{ENV['EXIFTOOL']} -j "#{path}"`
@@ -116,6 +117,9 @@ Entity.media.includes(:medium).each do |entity|
 
   unless new_dataset.empty?
     puts "entity #{entity.id}: applying new dataset values #{new_dataset.inspect}"
+
+    # uncomment these lines to write the changes to the db
     # entity.dataset.merge!(new_dataset)
+    # entity.update_column :attachment, entity.attachment
   end
 end
