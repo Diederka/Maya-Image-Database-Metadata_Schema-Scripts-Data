@@ -65,10 +65,10 @@ Entity.media.includes(:medium).each do |entity|
       'ColorSpaceData' => 'color_space',
       'FileName' => 'file_name',
       'xResolution' => 'maximum_optical_resolution',
-      'ImageWidth' => 'source_x_dimension_value',
-      'ExifImageWidth' => 'source_x_dimension_value',
-      'ImageHeight' => 'source_y_dimension_value',
-      'ExifImageHeight' => 'source_y_dimension_value',
+      'ImageWidth' => 'image_width',
+      'ExifImageWidth' => 'image_width',
+      'ImageHeight' => 'image_height',
+      'ExifImageHeight' => 'image_height',
       'Make' => 'digital_camera_manufacturer',
       'Model' => 'digital_camera_model_name'
     }
@@ -79,7 +79,8 @@ Entity.media.includes(:medium).each do |entity|
     end
   end
 
-  # do this only for images starting with 'MET_', even if there was no exif data
+  # do this only for images starting with 'MET_', even if there was no exif
+  # data, but in this case, the values should override preexisting ones
   if file_name.match?(/^MET_/)
     mapping = {
       'rights_holder' => 'Public Domain',
@@ -87,7 +88,7 @@ Entity.media.includes(:medium).each do |entity|
       'contributor' => 'Maya Image Archive'
     }
     mapping.each do |field, value|
-      if !entity.dataset[field].present? && !new_dataset[to].present?
+      if entity.dataset[field] != value
         new_dataset[field] = value
       end
     end
