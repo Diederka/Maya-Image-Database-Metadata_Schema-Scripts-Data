@@ -14,12 +14,26 @@ Also informations about our OAI-API are given here (see archive).
 
 ## General
 
-Please run all scripts from within the ConedaKOR installation directory, so
-e.g.:
+Log in to the server as user 'kor'. Don't use sudo for any of the steps. The
+scripts call sudo on their own, if super user privileges are required.
+
+Please run all scripts from within the script.git clone directory, so before
+running a script, first do
 
 ~~~bash
-cd /home/kor/kor
-ruby /home/kor/scripts.git/import_All_2020.rb
+cd /home/kor/scripts.git
+~~~
+
+Some scripts need configuration, for example database passwords. This can be
+changed in the .env file. You can find documentation for the various settings
+in .env.example. The values need to be changed only when new scripts are added
+with new functionality requiring new configuration options.
+
+Examples:
+
+~~~bash
+sh snapshot.sh # for shell scripts
+ruby relationship_duplicates.rb # for ruby scripts
 ~~~
 
 ## How to change this code
@@ -69,12 +83,12 @@ the unit anyhow.
 
 ## Taking snaphots (snapshot.sh)
 
-Configuration happens within the `.env` file, see `.env.example` for a template
-and availabe options.
+~~~bash
+sh snapshot.sh
+~~~
 
-Run the script with `./snapshot.sh` which will create a directory for the
-current timestamp within the snapshots directory. Taking a snapshot can take
-some time.
+The script will create a directory for the current timestamp within the
+snapshots directory. Taking a snapshot can take some time.
 
 ## Restoring snapshots
 
@@ -109,19 +123,32 @@ RAILS_ENV=production bundle exec bin/kor index-all
 
 ## Importing from CSV (import_All_2020.rb)
 
+~~~bash
+cd /home/kor/kor # this script has to be run from the kor install directory
+ruby import_All_2020.rb
+~~~
+
 Data is imported from `/home/kor/sourceFiles/source_import.csv` which is a 
 hardcoded path for the moment. So is the ConedaKOR install directory
 `/home/kor/kor`, `SIMULATION` mode and `DO_ENTITIES`, see top of
-`import_All_2020.rb`. Change those settings before running script to match our
+`import_All_2020.rb`. Change those settings before running script to match your
 needs.
 
 ## Check for relationship duplicates (relationship_duplicates.rb)
+
+~~~bash
+ruby relationship_duplicates.rb
+~~~
 
 This finds and deletes relationship duplicates. Per default, it is in simulation
 mode (no data is changed), change this by setting `SIMULATION = false` at the
 top of the script.
 
 ## Validate directed relationships (directed_relationship_check.rb)
+
+~~~bash
+ruby directed_relationship_check.rb
+~~~
 
 This verifies the internal structure of directed relationships according to  two
 way relationships and corrects potential errors. Per default, it is in
