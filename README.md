@@ -12,6 +12,21 @@ Also an example-cvs is given which contains the respective colums that are impor
 
 Also informations about our OAI-API are given here (see archive). 
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [General](#general)
+- [How to change this code](#how-to-change-this-code)
+- [Autoupload via Webdav](#autoupload-via-webdav)
+- [Taking snaphots (snapshot.sh)](#taking-snaphots-snapshotsh)
+- [Restoring snapshots](#restoring-snapshots)
+- [Importing from CSV (import_All_2020.rb)](#importing-from-csv-import_all_2020rb)
+- [Check for relationship duplicates (relationship_duplicates.rb)](#check-for-relationship-duplicates-relationship_duplicatesrb)
+- [Validate directed relationships (directed_relationship_check.rb)](#validate-directed-relationships-directed_relationship_checkrb)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## General
 
 Log in to the server as user 'kor'. Don't use sudo for any of the steps. The
