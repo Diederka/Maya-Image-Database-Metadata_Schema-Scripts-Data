@@ -15,6 +15,10 @@ if ! test -f $WEBDAV/done.txt ; then
 fi
 rm $WEBDAV/done.txt
 
+echo 'waiting to let webdav clients catch up ...'
+sleep 5
+echo 'done'
+
 # prepare directories
 mkdir -p $WEBDAV/archive
 mv $WEBDAV/new $CURRENT || mkdir $CURRENT
@@ -37,6 +41,7 @@ export SIMULATION="false"
 export DO_ENTITIES="true"
 export IMAGES_DIR="$CURRENT/images"
 export CSV_FILE="$CURRENT/data.csv"
+export RAILS_ENV="production"
 
 # make a backup
 /home/kor/scripts.git/snapshot.sh &>> $CURRENT/log.txt
