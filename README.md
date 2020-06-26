@@ -121,7 +121,7 @@ RAILS_ENV=production bundle exec bin/delayed_job stop
 
 cd /home/kor
 # this will take a couple of minutes
-cp -a backups/20200313_003812/SHARED ./SHARED.snapshot
+cp -a backups/20200313_003812/shared ./SHARED.snapshot
 sudo systemctl stop httpd
 # this will ask for a password, you can find it in SHARED/database.yml
 zcat backups/20200313_003812/dump.sql.gz | mysql -u kor -p kor_production
