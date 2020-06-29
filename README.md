@@ -125,6 +125,13 @@ cp -a backups/20200313_003812/shared ./SHARED.snapshot
 sudo systemctl stop httpd
 # this will ask for a password, you can find it in SHARED/database.yml
 zcat backups/20200313_003812/dump.sql.gz | mysql -u kor -p kor_production
+
+# move the data from before the restore to the old directory, make sure to add
+# an index not to overwrite other old versions. You may also simply delete older
+# versions in ./old/SHARED
+mv SHARED ./old/SHARED.old7
+
+mv SHARED.snapshot SHARED
 sudo systemctl start httpd
 
 # start the bg process
