@@ -105,7 +105,11 @@ example, an image `static/images/mypic.png` is then available at
 
     https://classicmayan.kor.de.dariah.eu/static/images/mypic.png
 
-Take note that there is no `/webdav/` in this url.
+Take note that there is no `/webdav/` in this url. To get an overview of
+deployed content and to copy urls, you may use
+
+    https://classicmayan.kor.de.dariah.eu/static
+
 
 ## Taking snaphots (snapshot.sh)
 
