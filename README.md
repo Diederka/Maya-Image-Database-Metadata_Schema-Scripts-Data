@@ -19,6 +19,7 @@ Also informations about our OAI-API are given here (see archive).
 - [General](#general)
 - [How to change this code](#how-to-change-this-code)
 - [Autoupload via Webdav](#autoupload-via-webdav)
+- [Deploy static content via Webdav](#deploy-static-content-via-webdav)
 - [Taking snaphots (snapshot.sh)](#taking-snaphots-snapshotsh)
 - [Restoring snapshots](#restoring-snapshots)
 - [Importing from CSV (import_All_2020.rb)](#importing-from-csv-import_all_2020rb)
@@ -95,6 +96,16 @@ sudo systemctl enable /home/kor/scripts.git/kor-webdav.path
 
 The latter command complains about a missing `Install` section but activates
 the unit anyhow.
+
+## Deploy static content via Webdav
+
+Static content (images, videos, css, html etc.) can be made available publicly
+by uploading it to the `static/` directory within the webdav (see above). For
+example, an image `static/images/mypic.png` is then available at
+
+    https://classicmayan.kor.de.dariah.eu/static/images/mypic.png
+
+Take note that there is no `/webdav/` in this url.
 
 ## Taking snaphots (snapshot.sh)
 
