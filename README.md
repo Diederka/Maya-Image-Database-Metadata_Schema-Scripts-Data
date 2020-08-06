@@ -100,15 +100,15 @@ the unit anyhow.
 ## Deploy static content via Webdav
 
 Static content (images, videos, css, html etc.) can be made available publicly
-by uploading it to the `static/` directory within the webdav (see above). For
-example, an image `static/images/mypic.png` is then available at
+by uploading it to the `dav-static/` directory within the webdav (see above).
+For example, an image `static/images/mypic.png` is then available at
 
-    https://classicmayan.kor.de.dariah.eu/static/images/mypic.png
+    https://classicmayan.kor.de.dariah.eu/dav-static/images/mypic.png
 
 Take note that there is no `/webdav/` in this url. To get an overview of
 deployed content and to copy urls, you may use
 
-    https://classicmayan.kor.de.dariah.eu/static
+    https://classicmayan.kor.de.dariah.eu/dav-static
 
 
 ## Taking snaphots (snapshot.sh)
