@@ -1,8 +1,8 @@
 KOR_ROOT = ENV['KOR_ROOT']
 
-gem 'pry', '=0.11.3'
-gem 'coderay', '=1.1.2'
-require 'pry'
+# gem 'pry', '=0.11.3'
+# gem 'coderay', '=1.1.2'
+# require 'pry'
 
 require "#{KOR_ROOT}/config/environment"
 
