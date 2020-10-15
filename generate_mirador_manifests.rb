@@ -85,14 +85,25 @@ class IaeManifestGenerator
       },
       {
         label: 'Link to DB entry',
-        value: app.web_path(anchor: app.entity_path(@entity))
+        value: app.web_url(anchor: app.entity_path(@entity))
       }
     ]
   end
 
   # so we can use helpers
   def app
-    @app ||= ActionDispatch::Integration::Session.new(Rails.application)
+    @app ||= begin
+      result = ActionDispatch::Integration::Session.new(Rails.application)
+
+      def result.default_url_options
+        return {
+          protocol: 'https',
+          host: 'classicmayan.kor.de.dariah.eu'
+        }
+      end
+
+      result
+    end
   end
 end
 
@@ -107,5 +118,7 @@ Entity.media.includes(:medium).find_each do |entity|
   File.open "#{BASE_DIR}/#{entity.id}.json", 'w' do |f|
     f.write JSON.pretty_generate(data)
   end
+  # puts JSON.pretty_generate(data)
+  # exit
   progress.increment
 end
