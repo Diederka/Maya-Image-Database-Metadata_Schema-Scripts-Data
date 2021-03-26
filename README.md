@@ -15,7 +15,6 @@ Also informations about our OAI-API are given here (see archive).
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [General](#general)
 - [How to change this code](#how-to-change-this-code)
 - [Autoupload via Webdav](#autoupload-via-webdav)
@@ -25,6 +24,7 @@ Also informations about our OAI-API are given here (see archive).
 - [Importing from CSV (import_All_2020.rb)](#importing-from-csv-import_all_2020rb)
 - [Check for relationship duplicates (relationship_duplicates.rb)](#check-for-relationship-duplicates-relationship_duplicatesrb)
 - [Validate directed relationships (directed_relationship_check.rb)](#validate-directed-relationships-directed_relationship_checkrb)
+- [Generate "combined" XML dump](#generate-combined-xml-dump)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -191,3 +191,16 @@ This verifies the internal structure of directed relationships according to  two
 way relationships and corrects potential errors. Per default, it is in
 simulation mode (no data is changed), change this by setting `SIMULATION =
 false` at the top of the script.
+
+## Generate "combined" XML dump
+
+~~~bash
+cd /home/kor/package
+rm -rf ./kor_xml
+ruby oai_pmh_client
+ruby combine_oai_xml.rb
+~~~
+
+This retrieves all data from all OAI-PMH endpoints and dumps it in `./kor_xml`.
+Then, a combined version is generated and written to `./kor_xml/combined.xml`.
+The process takes roughly 15 Minutes.
