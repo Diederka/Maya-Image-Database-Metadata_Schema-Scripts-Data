@@ -47,7 +47,7 @@ export RAILS_ENV="production"
 /home/kor/scripts.git/snapshot.sh &>> $CURRENT/log.txt
 
 # run the import
-$RUBY $ROOT/import_All_2020.rb &>> $CURRENT/log.txt
+$RUBY $ROOT/import_All_2021.rb &>> $CURRENT/log.txt
 
 # clean up
 touch $WEBDAV/done.txt
