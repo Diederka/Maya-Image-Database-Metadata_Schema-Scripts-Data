@@ -374,6 +374,22 @@ class MayaImporter
     end
   end
 
+  def add_relationship_dating(relationship, attrs)
+    dating = RelationshipDating.new(attrs)
+
+    if dating.dating_string == 'date unknown'
+      dating.save validate: false
+      relationship.datings << dating
+      return
+    end
+            
+    if dating.valid?
+      relationship.datings << dating
+    else
+      error "relationship dating '#{dating.dating_string}' could not be created on relationship #{relationship.id}"
+    end
+  end
+
   def relationships
     guest_collection = Collection.find_by!(name: 'Guest Collection')
     places = Kind.find_by! name: 'Place'
@@ -484,16 +500,10 @@ class MayaImporter
         # add new ones after checking the condition if there is relation dating yet
         if datings.where(label: 'Creation Date of Medium').count == 0
           if value.present? # this checks for the empty string, only white-space, nil, 0 and so on
-            dating = RelationshipDating.new(
+            add_relationship_dating(dr.relationship,
               label: 'Creation Date of Medium',
               dating_string: value
             )
-
-            if dating.valid?
-              dr.relationship.datings << dating
-            else
-              error "relationship dating '#{value}' could not be created on relationship #{dr.relationship_id}"
-            end
           end
 
           # puts value
@@ -517,16 +527,10 @@ class MayaImporter
         # add new ones after checking the condition if there is relation dating yet
         if datings.where(label: 'Creation Date of Medium').count == 0
           if value.present? # this checks for the empty string, only white-space, nil, 0 and so on
-            dating = RelationshipDating.new(
+            add_relationship_dating(dr.relationship,
               label: 'Creation Date of Medium',
               dating_string: value
             )
-
-            if dating.valid?
-              dr.relationship.datings << dating
-            else
-              error "relationship dating '#{value}' could not be created on relationship #{dr.relationship_id}"
-            end
           end
           # puts value
           # das folgende ist evtl. nicht notwendig, weil oben schon abgefragt wird, ob vorhanden und wenn nicht, dann erstellen
@@ -549,16 +553,10 @@ class MayaImporter
         # add new ones after checking the condition if there is relation dating yet
         if datings.where(label: 'Creation Date of Medium').count == 0
           if value.present? # this checks for the empty string, only white-space, nil, 0 and so on
-            dating = RelationshipDating.new(
+            add_relationship_dating(dr.relationship,
               label: 'Creation Date of Medium',
               dating_string: value
             )
-
-            if dating.valid?
-              dr.relationship.datings << dating
-            else
-              error "relationship dating '#{value}' could not be created on relationship #{dr.relationship_id}"
-            end
           end
           # puts value
           # das folgende ist evtl. nicht notwendig, weil oben schon abgefragt wird, ob vorhanden und wenn nicht, dann erstellen
@@ -581,16 +579,10 @@ class MayaImporter
         # add new ones after checking the condition if there is relation dating yet
         if datings.where(label: 'Creation Date of Medium').count == 0
           if value.present? # this checks for the empty string, only white-space, nil, 0 and so on
-            dating = RelationshipDating.new(
+            add_relationship_dating(dr.relationship,
               label: 'Creation Date of Medium',
               dating_string: value
             )
-
-            if dating.valid?
-              dr.relationship.datings << dating
-            else
-              error "relationship dating '#{value}' could not be created on relationship #{dr.relationship_id}"
-            end
           end
 
           # das folgende ist evtl. nicht notwendig, weil oben schon abgefragt wird, ob vorhanden und wenn nicht, dann erstellen
