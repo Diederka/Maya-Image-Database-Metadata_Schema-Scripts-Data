@@ -9,7 +9,7 @@ WEBDAV="/home/kor/kor/webdav"
 CURRENT="$WEBDAV/archive/$TS"
 
 # make sure no previous run is active
-if ! test -f $WEBDAV/done.txt ; then
+if [ ! -f $WEBDAV/done.txt ]; then
   echo 'a previous run has not finished yet'
   exit 1
 fi
