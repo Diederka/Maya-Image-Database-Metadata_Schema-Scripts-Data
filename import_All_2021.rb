@@ -97,6 +97,7 @@ class MayaImporter
         'image_description' => record['Image Description'],
         'folder_no' => record['Folder Number'],
         'license' => record['License'],
+        'cc_license_uri' => record['License URI'],
         'creator' => record['Creator of Image'],
         'date_time_created' => record['Date'],
         'note' => record['Note'],
