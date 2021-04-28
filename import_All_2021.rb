@@ -42,6 +42,7 @@ class MayaImporter
 
   def run
     Rails.configuration.active_job.queue_adapter = :inline
+    ActiveRecord::Base.logger.level = :info
 
     puts "SIMULATION MODE" if @opts[:simulation]
 
@@ -76,7 +77,8 @@ class MayaImporter
   def media
     kind = Kind.find_by!(name: 'medium')
 
-    read_csv(@opts[:csv_file]).each_with_index do |record, i|
+    items = read_csv(@opts[:csv_file])
+    items.each_with_index do |record, i|
       image_path = image_path_for(record['Image Number'])
 
       unless image_path
@@ -150,14 +152,15 @@ class MayaImporter
       end
     end
 
-    puts "DONE: media"
+    puts "DONE: media (#{items.size} lines found in CSV file)"
   end
 
   def artefacts
     guest_collection = Collection.find_by!(name: 'Guest Collection')
     kind = Kind.find_by!(name: 'artefact')
 
-    read_csv(@opts[:csv_file]).each_with_index do |record, i|
+    items = read_csv(@opts[:csv_file])
+    items.each_with_index do |record, i|
       dataset = {
         'artefact_type' => record['Artefact Type'],
         'artefact_type_in_twkm_database' => record['Artefact Type in TWKM Database'],
@@ -192,14 +195,15 @@ class MayaImporter
       end
     end
 
-    puts "DONE: artefacts"
+    puts "DONE: artefacts (#{items.size} lines found in CSV file)"
   end
 
   def collections
     guest_collection = Collection.find_by!(name: 'Guest Collection')
     kind = Kind.find_by!(name: 'collection')
 
-    read_csv(@opts[:csv_file]).each_with_index do |record, i|
+    items = read_csv(@opts[:csv_file])
+    items.each_with_index do |record, i|
       next unless record['Collection Name']
 
       dataset = {
@@ -226,14 +230,15 @@ class MayaImporter
       end
     end
 
-    puts "DONE: collections"
+    puts "DONE: collections (#{items.size} lines found in CSV file)"
   end
 
   def people
     guest_collection = Collection.find_by!(name: 'Guest Collection')
     kind = Kind.find_by!(name: 'person')
 
-    read_csv(@opts[:csv_file]).each_with_index do |record, i|
+    items = read_csv(@opts[:csv_file])
+    items.each_with_index do |record, i|
       dataset = {
         'person_created_medium' => record['Image Number'],
         'person_documented_artefact' => record['Artefact Name'],
@@ -258,14 +263,15 @@ class MayaImporter
       end
     end
 
-    puts "DONE: people"
+    puts "DONE: people (#{items.size} lines found in CSV file)"
   end
 
   def places
     guest_collection = Collection.find_by!(name: 'Guest Collection')
     kind = Kind.find_by!(name: 'place')
 
-    read_csv(@opts[:csv_file]).each_with_index do |record, i|
+    items = read_csv(@opts[:csv_file])
+    items.each_with_index do |record, i|
       dataset = {
        'place_in_twkm_database' => record['Place in TWKM Database'],
        'place_located_holder' => record['Holder Name'],
@@ -292,14 +298,15 @@ class MayaImporter
       end
     end
 
-    puts "DONE: places"
+    puts "DONE: places (#{items.size} lines found in CSV file)"
   end
 
   def provenances
     guest_collection = Collection.find_by!(name: 'Guest Collection')
     kind = Kind.find_by!(name: 'provenance')
 
-    read_csv(@opts[:csv_file]).each_with_index do |record, i|
+    items = read_csv(@opts[:csv_file])
+    items.each_with_index do |record, i|
       dataset = {
         'provenance_in_twkm_website' => record['Provenance in TWKM Website'],
         'provenance_in_twkm_database' => record['Provenance in TWKM Database'],
@@ -324,14 +331,15 @@ class MayaImporter
       end
     end
 
-    puts "DONE: provenances"
+    puts "DONE: provenances (#{items.size} lines found in CSV file)"
   end
 
   def holders
     guest_collection = Collection.find_by!(name: 'Guest Collection')
     kind = Kind.find_by!(name: 'holder')
 
-    read_csv(@opts[:csv_file]).each_with_index do |record, i|
+    items = read_csv(@opts[:csv_file])
+    items.each_with_index do |record, i|
       next unless record['Holder Name']
 
       dataset = {
@@ -357,7 +365,7 @@ class MayaImporter
       end
     end
 
-    puts "DONE: holders"
+    puts "DONE: holders (#{items.size} lines found in CSV file)"
   end
 
   def add_relationship(from, relation_name, to)
@@ -616,7 +624,7 @@ class MayaImporter
         return []
       end
 
-      lines = File.read(path).split("\n") || []
+      lines = File.read(path).split(/[\r\n]+/)
       headers = lines[0].split(';').map{|e| e.strip.gsub(/ {2,}/, ' ')}
       lines[1..-1].map do |line|
         fields = line.split(';').map{|e| e.strip.gsub(/ {2,}/, ' ')}
