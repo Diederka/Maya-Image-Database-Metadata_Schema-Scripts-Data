@@ -624,7 +624,9 @@ class MayaImporter
         return []
       end
 
-      lines = File.read(path).split(/[\r\n]+/)
+      lines = File.read(path).
+        split(/[\r\n]+/).
+        reject{|l| l.match? /^;*$/}
       headers = lines[0].split(';').map{|e| e.strip.gsub(/ {2,}/, ' ')}
       lines[1..-1].map do |line|
         fields = line.split(';').map{|e| e.strip.gsub(/ {2,}/, ' ')}
