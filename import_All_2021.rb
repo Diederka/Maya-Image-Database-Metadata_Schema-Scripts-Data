@@ -395,7 +395,9 @@ class MayaImporter
     if dating.valid?
       relationship.datings << dating
     else
-      error "relationship dating '#{dating.dating_string}' could not be created on relationship #{relationship.id}"
+      r = relationship
+      msg = "relationship dating '#{dating.dating_string}' could not be created"
+      error "#{msg} on relationship #{r.from_id} - #{r.relation.name} - #{r.to_id}"
     end
   end
 
