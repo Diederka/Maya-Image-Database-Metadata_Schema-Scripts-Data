@@ -130,31 +130,24 @@ snapshot. Choose a snapshot to restore and then (we will use 20200313_003812
 as example here):
 
 ~~~bash
-# stop the bg process
-cd /home/kor/kor
-RAILS_ENV=production bundle exec bin/delayed_job stop
-
 cd /home/kor
 # this will take a couple of minutes
-cp -a backups/20200313_003812/shared ./SHARED.snapshot
+cp -a backups/20200313_003812/shared rack/shared.snapshot
 sudo systemctl stop httpd
-# this will ask for a password, you can find it in SHARED/database.yml
+# this will ask for a password, you can find it in shared/env
 zcat backups/20200313_003812/dump.sql.gz | mysql -u kor -p kor_production
 
 # move the data from before the restore to the old directory, make sure to add
 # an index not to overwrite other old versions. You may also simply delete older
-# versions in ./old/SHARED
-mv SHARED ./old/SHARED.old7
+# versions in ./old/shared
+cd /home/kor/rack
+mv shared ./old/shared.old7
 
-mv SHARED.snapshot SHARED
+mv shared.snapshot shared
 sudo systemctl start httpd
 
-# start the bg process
-cd /home/kor/kor
-RAILS_ENV=production bundle exec bin/delayed_job start
-
 # refresh the index
-cd /home/kor/kor
+cd /home/kor/rack/current
 RAILS_ENV=production bundle exec bin/kor index-all
 ~~~
 

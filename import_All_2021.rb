@@ -37,11 +37,13 @@ class MayaImporter
       images_dir: nil
     )
 
+    @started_at = Time.now
     @errors = []
   end
 
   def run
-    Rails.configuration.active_job.queue_adapter = :inline
+    ActiveJob::Base.queue_adapter = :inline
+    ActiveJob::Base.logger.level = :debug
     ActiveRecord::Base.logger.level = :info
 
     puts "SIMULATION MODE" if @opts[:simulation]
@@ -368,6 +370,11 @@ class MayaImporter
     puts "DONE: holders (#{items.size} lines found in CSV file)"
   end
 
+  def url_for(entity)
+    id = (entity.is_a?(Entity) ? entity.id : entity)
+    "#{Kor.root_url}#/enities/#{id}"
+  end
+
   def add_relationship(from, relation_name, to)
     return unless to
 
@@ -377,7 +384,7 @@ class MayaImporter
       if relationship.valid?
         relationship.save unless @opts[:simulation]
       else
-        msg = "relationship '#{from.id} - #{relation_name} - #{to.id}'"
+        msg = "relationship '#{url_for(from)} - #{relation_name} - #{url_for(to)}'"
         error "#{msg} could not be created: #{relationship.errors.full_messages}"
       end
     end
@@ -397,7 +404,15 @@ class MayaImporter
     else
       r = relationship
       msg = "relationship dating '#{dating.dating_string}' could not be created"
-      error "#{msg} on relationship #{r.from_id} - #{r.relation.name} - #{r.to_id}"
+      error "#{msg} on relationship #{url_for(r.from_id)} - #{r.relation.name} - #{url_for(r.to_id)}"
+    end
+  end
+
+  # returns true if one of the records has been modified during this import run
+  def recent?(records)
+    records.compact.any? do |record|
+      record.created_at >= @started_at ||
+      record.updated_at >= @started_at
     end
   end
 
@@ -414,6 +429,8 @@ class MayaImporter
     relation_name = "artefact is / was located in place"
     artefacts.entities.each do |artefact|
       place = places.entities.find_by name: artefact.dataset['artefact_was_located_in_place']
+      next unless recent?([artefact, place])
+
       add_relationship(artefact, relation_name, place)
     end
     puts "DONE: #{relation_name}"
@@ -421,6 +438,8 @@ class MayaImporter
     relation_name = "place locates / located holder"
     places.entities.each do |place|
       holder = holders.entities.find_by name: place.dataset['place_located_holder']
+      next unless recent?([place, holder])
+
       add_relationship(place, relation_name, holder)
     end
     puts "DONE: #{relation_name}"
@@ -428,6 +447,8 @@ class MayaImporter
     relation_name = "artefact originates from provenance"
     artefacts.entities.each do |artefact|
       provenance = provenances.entities.find_by name: artefact.dataset['artefact_originates_from_provenance']
+      next unless recent?([artefact, provenance])
+
       add_relationship(artefact, relation_name, provenance)
     end
     puts "DONE: #{relation_name}"
@@ -435,6 +456,8 @@ class MayaImporter
     relation_name = "collection holds / held artefact"
     collection_kind.entities.each do |collection|
       artefact = artefacts.entities.find_by name: collection.dataset['collection_held_artefact']
+      next unless recent?([collection, artefact])
+
       add_relationship(collection, relation_name, artefact)
     end
     puts "DONE: #{relation_name}"
@@ -442,6 +465,8 @@ class MayaImporter
     relation_name = "medium was created at place"
     media.entities.each do |medium|
       place = places.entities.find_by name: medium.dataset['medium_was_created_at_place']
+      next unless recent?([medium, place])
+
       add_relationship(medium, relation_name, place)
     end
     puts "DONE: #{relation_name}"
@@ -449,6 +474,8 @@ class MayaImporter
     relation_name = "place locates / located collection"
     places.entities.each do |place|
       collection = collection_kind.entities.find_by name: place.dataset['place_located_collection']
+      next unless recent?([place, collection])
+
       add_relationship(place, relation_name, collection)
     end
     puts "DONE: #{relation_name}"
@@ -456,6 +483,8 @@ class MayaImporter
     relation_name = "medium was created from collection"
     media.entities.each do |medium|
       collection = collection_kind.entities.find_by name: medium.dataset['medium_was_created_from_collection']
+      next unless recent?([medium, collection])
+
       add_relationship(medium, relation_name, collection)
     end
     puts "DONE: #{relation_name}"
@@ -463,6 +492,8 @@ class MayaImporter
     relation_name = "medium depicts artefact"
     media.entities.each do |medium|
       artefact = artefacts.entities.find_by name: medium.dataset['medium_depicts_artefact']
+      next unless recent?([medium, artefact])
+
       add_relationship(medium, relation_name, artefact)
     end
     puts "DONE: #{relation_name}"
@@ -470,6 +501,8 @@ class MayaImporter
     relation_name = "collection is / was held by holder"
     collection_kind.entities.each do |collection|
       holder = holders.entities.find_by name: collection.dataset['collection_was_held_by_holder']
+      next unless recent?([collection, holder])
+
       add_relationship(collection, relation_name, holder)
     end
     puts "DONE: #{relation_name}"
@@ -477,6 +510,8 @@ class MayaImporter
     relation_name = "place was visited by person"
     places.entities.each do |place|
       person = people.entities.find_by name: place.dataset['place_was_visited_by_person']
+      next unless recent?([place, person])
+
       add_relationship(place, relation_name, person)
     end
     puts "DONE: #{relation_name}"
@@ -484,6 +519,8 @@ class MayaImporter
     relation_name = "place locates / located holder"
     places.entities.each do |place|
       holder = holders.entities.find_by name: place.dataset['place_located_holder']
+      next unless recent?([place, holder])
+
       add_relationship(place, relation_name, holder)
     end
     puts "DONE: #{relation_name}"
@@ -491,6 +528,8 @@ class MayaImporter
     relation_name = "medium was created by person"
     media.entities.each do |medium|
       person = people.entities.find_by name: medium.dataset['medium_was_created_by_person']
+      next unless recent?([medium, person])
+
       add_relationship(medium, relation_name, person)
     end
     puts "DONE: #{relation_name}"
@@ -498,6 +537,8 @@ class MayaImporter
     relation_name = "artefact was documented by person"
     artefacts.entities.each do |artefact|
       person = people.entities.find_by name: artefact.dataset['artefact_was_documented_by_person']
+      next unless recent?([artefact, person])
+
       add_relationship(artefact, relation_name, person)
     end
     puts "DONE: #{relation_name}"
@@ -506,6 +547,8 @@ class MayaImporter
     media.entities.each do |medium|
       value = medium.dataset['date_time_created']
       medium.outgoing_relationships.where(relation_name: 'medium was created by person').each do |dr|
+        next unless recent?([medium, dr.from, dr.to])
+        
         datings = dr.relationship.datings
 
         # add new ones after checking the condition if there is relation dating yet
@@ -533,6 +576,8 @@ class MayaImporter
     media.entities.each do |medium|
       value = medium.dataset['date_time_created']
       medium.outgoing_relationships.where(relation_name: 'medium depicts artefact').each do |dr|
+        next unless recent?([medium, dr.from, dr.to])
+
         datings = dr.relationship.datings
 
         # add new ones after checking the condition if there is relation dating yet
@@ -559,6 +604,8 @@ class MayaImporter
     media.entities.each do |medium|
       value = medium.dataset['date_time_created']
       medium.outgoing_relationships.where(relation_name: 'medium was created from collection').each do |dr|
+        next unless recent?([medium, dr.from, dr.to])
+
         datings = dr.relationship.datings
 
         # add new ones after checking the condition if there is relation dating yet
@@ -585,6 +632,8 @@ class MayaImporter
     media.entities.each do |medium|
       value = medium.dataset['date_time_created']
       medium.outgoing_relationships.where(relation_name: 'medium was created at place').each do |dr|
+        next unless recent?([medium, dr.from, dr.to])
+
         datings = dr.relationship.datings
 
         # add new ones after checking the condition if there is relation dating yet
