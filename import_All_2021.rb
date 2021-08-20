@@ -85,7 +85,7 @@ class MayaImporter
 
       unless image_path
         msg = "medium could not be created, file not found"
-        error "#{msg}: #{record['Image Number']} (line #{i + 3})"
+        error "#{msg}: #{record['Image Number']} (line #{i + 2})"
         next
       end
       
@@ -145,11 +145,11 @@ class MayaImporter
             group = groups.first
             group.add_entities entity
           else
-            error "there is more than one global group '#{name}' #{i + 3}"
+            error "there is more than one global group '#{name}' #{i + 2}"
           end
         end
       else
-        msg = "medium could not be created from CSV line #{i + 3}"
+        msg = "medium could not be created from CSV line #{i + 2}"
         error "#{msg}: #{entity.errors.full_messages}"
       end
     end
@@ -192,7 +192,7 @@ class MayaImporter
       if entity.valid?
         entity.save unless @opts[:simulation]
       else
-        msg = "artefact could not be created from CSV line #{i + 3}"
+        msg = "artefact could not be created from CSV line #{i + 2}"
         error "#{msg}: #{entity.errors.full_messages}"
       end
     end
@@ -227,7 +227,7 @@ class MayaImporter
       if entity.valid?
         entity.save unless @opts[:simulation]
       else
-        msg = "collection could not be created from CSV line #{i + 3}"
+        msg = "collection could not be created from CSV line #{i + 2}"
         error "#{msg}: #{entity.errors.full_messages}"
       end
     end
@@ -260,7 +260,7 @@ class MayaImporter
         entity.save unless @opts[:simulation]
       else
 
-        msg = "person could not be created from CSV line #{i + 3}"
+        msg = "person could not be created from CSV line #{i + 2}"
         error "#{msg}: #{entity.errors.full_messages}"
       end
     end
@@ -295,7 +295,7 @@ class MayaImporter
       if entity.valid?
         entity.save unless @opts[:simulation]
       else
-        msg = "place could not be created from CSV line #{i + 3}"
+        msg = "place could not be created from CSV line #{i + 2}"
         error "#{msg}: #{entity.errors.full_messages}"
       end
     end
@@ -328,7 +328,7 @@ class MayaImporter
       if entity.valid?
         entity.save unless @opts[:simulation]
       else
-        msg = "provenance could not be created from CSV line #{i + 3}"
+        msg = "provenance could not be created from CSV line #{i + 2}"
         error "#{msg}: #{entity.errors.full_messages}"
       end
     end
@@ -362,7 +362,7 @@ class MayaImporter
       if entity.valid?
         entity.save unless @opts[:simulation]
       else
-        msg = "holder could not be created from CSV line #{i + 3}"
+        msg = "holder could not be created from CSV line #{i + 2}"
         error "#{msg}: #{entity.errors.full_messages}"
       end
     end
