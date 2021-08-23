@@ -6,10 +6,10 @@ ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $ROOT/.env
 REPO="$BACKUP_DIRECTORY/borg"
 
-NAME="kor"
+DATA_DIR="/home/kor/rack"
 BIN="/usr/bin/borg"
-OPTS="--compression none -v --show-rc --progress --info"
-OPTS="$OPTS --stats --patterns-from $ROOT/snapshot.patterns"
+OPTS="--compression none -v --show-rc --progress --info --stats"
+DATA_SPEC="$DATA_DIR/shared"
 export BORG_RELOCATED_REPO_ACCESS_IS_OK=yes
 
 # ensure db dump is up to date
@@ -31,15 +31,15 @@ function nightly {
   ensure_dump
 
   # do the backup and clean up
-  $BIN create $OPTS $REPO::$NAME-{now:%Y-%m-%d-%H-%M-%S}
-  $BIN prune -v --list --keep-daily=30 --keep-weekly=8 --keep-monthly=24 --prefix=$NAME $REPO
+  $BIN create $OPTS $REPO::nightly-{now:%Y%m%d_%H%M%S} $DATA_SPEC
+  $BIN prune -v --list --keep-daily=30 --keep-weekly=8 --keep-monthly=24 --prefix=nightly $REPO
 }
 
 function manual {
   ensure_dump
-  
-  $BIN delete $REPO::$NAME-manual
-  $BIN create $OPTS $REPO::$NAME-manual /
+
+  # $BIN delete $REPO::$NAME-manual $DATA_SPEC
+  $BIN create $OPTS $REPO::manual-{now:%Y-%m-%d-%H-%M-%S} $DATA_SPEC
   echo "done"
 }
 

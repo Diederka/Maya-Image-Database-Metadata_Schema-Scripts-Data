@@ -1,0 +1,10 @@
+[Unit]
+Description=kor nightly snapshot (timer)
+
+[Timer]
+Unit=kor-snapshot.service
+OnCalendar=*-*-* 02:30:00
+RandomizedDelaySec=10m
+
+[Install]
+WantedBy=timers.target
