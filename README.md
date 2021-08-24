@@ -117,30 +117,58 @@ deployed content and to copy urls, you may use
 sh snapshot.sh
 ~~~
 
-The script will create a directory for the current timestamp within the
-snapshots directory. Taking a snapshot can take some time.
+The script will create an archive with borgbackup within the snapshots directory
+under the `borg` subdirectory. A systemd unit triggers a snapshot every night,
+see below.
+
+When called manually like above, a manual snapshot will be created, these are protected
+from deletion.
+
+Note: This repository contains the systemd units to trigger the script every
+night:
+
+~~~bash
+sudo systemctl link /home/kor/scripts.git/kor-snapshot.service
+sudo systemctl enable /home/kor/scripts.git/kor-snapshot.path
+~~~
+
+The latter command complains about a missing `Install` section but activates
+the unit anyhow.
 
 ## Restoring snapshots
 
 Before you do this, it might be a good idea to create another snapshot, see
 above.
 
-Snapshots are saved in `/home/kor/backups`. Each subdirectory represents one
-snapshot. Choose a snapshot to restore and then (we will use 20200313_003812
-as example here):
+To get a list of available snapshots, run
+
+~~~bash
+/home/kor/scripts.git/snapshot.sh list
+~~~
+
+Pick a snapshot by name (first column), e.g. "my-snapshot" and then run
 
 ~~~bash
 cd /home/kor
-# this will take a couple of minutes
-cp -a backups/20200313_003812/shared rack/shared.snapshot
+mkdir -p restore
+cd restore
+borg extract --progress /home/kor/backups/borg::my-snapshot
+~~~
+
+Now the restored data is in a directory `/home/kor/restore/home/kor/rack/shared`
+
+~~~bash
+cd /home/kor/rack 
+# move the data into the kor directory
+mv /home/kor/restore/home/kor/rack/shared shared.snapshot
+
 sudo systemctl stop httpd
 # this will ask for a password, you can find it in shared/env
-zcat backups/20200313_003812/dump.sql.gz | mysql -u kor -p kor_production
+zcat shared.snapshot/dump.sql.gz | mysql -u kor -p kor_production
 
 # move the data from before the restore to the old directory, make sure to add
 # an index not to overwrite other old versions. You may also simply delete older
 # versions in ./old/shared
-cd /home/kor/rack
 mv shared ./old/shared.old7
 
 mv shared.snapshot shared
