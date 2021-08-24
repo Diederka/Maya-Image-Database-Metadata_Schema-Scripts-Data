@@ -43,9 +43,6 @@ export IMAGES_DIR="$CURRENT/images"
 export CSV_FILE="$CURRENT/data.csv"
 export RAILS_ENV="production"
 
-# make a backup
-/home/kor/scripts.git/snapshot.sh &>> $CURRENT/log.txt
-
 # run the import
 $RUBY $ROOT/import_All_2021.rb &>> $CURRENT/log.txt
 
