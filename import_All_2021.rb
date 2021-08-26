@@ -38,6 +38,8 @@ class MayaImporter
     )
 
     @started_at = Time.now
+    sleep 2
+
     @errors = []
   end
 
