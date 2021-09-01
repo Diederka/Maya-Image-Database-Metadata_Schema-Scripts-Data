@@ -548,6 +548,8 @@ class MayaImporter
     task = "relation dating medium was created by person"
     media.entities.each do |medium|
       value = medium.dataset['date_time_created']
+      next if value && value.match?(/undated/)
+
       medium.outgoing_relationships.where(relation_name: 'medium was created by person').each do |dr|
         next unless recent?([medium, dr.from, dr.to])
         
@@ -577,6 +579,8 @@ class MayaImporter
     task = 'relation dating medium depicts artefact'
     media.entities.each do |medium|
       value = medium.dataset['date_time_created']
+      next if value && value.match?(/undated/)
+
       medium.outgoing_relationships.where(relation_name: 'medium depicts artefact').each do |dr|
         next unless recent?([medium, dr.from, dr.to])
 
@@ -605,6 +609,8 @@ class MayaImporter
     task = 'relation dating medium was created from collection'
     media.entities.each do |medium|
       value = medium.dataset['date_time_created']
+      next if value && value.match?(/undated/)
+
       medium.outgoing_relationships.where(relation_name: 'medium was created from collection').each do |dr|
         next unless recent?([medium, dr.from, dr.to])
 
@@ -633,6 +639,8 @@ class MayaImporter
     task = 'relation relation dating medium was created at place'
     media.entities.each do |medium|
       value = medium.dataset['date_time_created']
+      next if value && value.match?(/undated/)
+      
       medium.outgoing_relationships.where(relation_name: 'medium was created at place').each do |dr|
         next unless recent?([medium, dr.from, dr.to])
 
