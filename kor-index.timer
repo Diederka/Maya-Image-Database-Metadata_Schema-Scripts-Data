@@ -1,0 +1,10 @@
+[Unit]
+Description=kor nightly index refresh (timer)
+
+[Timer]
+Unit=kor-index.service
+OnCalendar=*-*-* 02:45:00
+RandomizedDelaySec=10m
+
+[Install]
+WantedBy=timers.target
