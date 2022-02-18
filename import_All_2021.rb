@@ -106,7 +106,6 @@ class MayaImporter
         'cc_license_uri' => record['License URI'],
         'creator' => record['Creator of Image'],
         'date_time_created' => record['Date'],
-        'note' => record['Note'],
         'file_name' => record['Image Number'],
 
         'contributor' => "Project Text Database and Dictionary of Classic Mayan",
@@ -128,6 +127,7 @@ class MayaImporter
         collection: collection,
         dataset: dataset,
         distinct_name: record['Image Number']
+        comment: record['Note']
       )
 
       if date = record['Date']
