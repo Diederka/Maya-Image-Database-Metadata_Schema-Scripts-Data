@@ -127,7 +127,7 @@ class MayaImporter
         collection: collection,
         dataset: dataset,
         distinct_name: record['Image Number']
-        comment: record['Note']
+        comment: record['Comment']
       )
 
       if date = record['Date']
