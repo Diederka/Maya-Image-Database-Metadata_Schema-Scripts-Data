@@ -96,6 +96,8 @@ class MayaImporter
       dimensions = dimensions_for(image_path)
       dimensions = (dimensions ? dimensions[1].to_s : '')
 
+      record['Date'] = 'undated' if record['Date'].match?(/9999/)
+
       dataset = {
         'image_no' => record['Image Number'],
         'image_dimensions' => dimensions,
@@ -130,8 +132,11 @@ class MayaImporter
         comment: record['Comment']
       )
 
-      if date = record['Date']
-        entity.datings << EntityDating.new(label: 'Year', dating_string: date)
+      if record['Date'] != 'undated'
+        entity.datings << EntityDating.new(
+          label: 'Year',
+          dating_string: record['Date']
+        )
       end
 
       if entity.valid?
@@ -395,6 +400,7 @@ class MayaImporter
   def add_relationship_dating(relationship, attrs)
     dating = RelationshipDating.new(attrs)
 
+    # TODO: still needed?
     if dating.dating_string == 'date unknown'
       dating.save validate: false
       relationship.datings << dating
