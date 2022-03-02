@@ -126,7 +126,7 @@ class MayaImporter
         medium: (image_path ? Medium.new(document: File.open(image_path)) : nil),
         collection: collection,
         dataset: dataset,
-        distinct_name: record['Image Number']
+        distinct_name: record['Image Number'],
         comment: record['Comment']
       )
 
