@@ -132,12 +132,12 @@ class MayaImporter
         comment: record['Comment']
       )
 
-      if record['Date'] != 'undated'
-        entity.datings << EntityDating.new(
-          label: 'Year',
-          dating_string: record['Date']
-        )
-      end
+      # if record['Date'] != 'undated'
+      #   entity.datings << EntityDating.new(
+      #     label: 'Year',
+      #     dating_string: record['Date']
+      #   )
+      # end
 
       if entity.valid?
         entity.save unless @opts[:simulation]
@@ -398,22 +398,13 @@ class MayaImporter
   end
 
   def add_relationship_dating(relationship, attrs)
-    dating = RelationshipDating.new(attrs)
+    return unless attrs[:dating_string].present?
 
-    # TODO: still needed?
-    if dating.dating_string == 'date unknown'
-      dating.save validate: false
-      relationship.datings << dating
-      return
-    end
-            
-    if dating.valid?
-      relationship.datings << dating
-    else
-      r = relationship
-      msg = "relationship dating '#{dating.dating_string}' could not be created"
-      error "#{msg} on relationship #{url_for(r.from_id)} - #{r.relation.name} - #{url_for(r.to_id)}"
-    end
+    props = relationship.properties.
+      select{|p| !p.match?(/^#{attrs[:label]}:/)}
+    props << "#{attrs[:label]}: #{attrs[:dating_string]}"
+
+    relationship.update_column :properties, props
   end
 
   # returns true if one of the records has been modified during this import run
@@ -561,23 +552,10 @@ class MayaImporter
         
         datings = dr.relationship.datings
 
-        # add new ones after checking the condition if there is relation dating yet
-        if datings.where(label: 'Creation Date of Medium').count == 0
-          if value.present? # this checks for the empty string, only white-space, nil, 0 and so on
-            add_relationship_dating(dr.relationship,
-              label: 'Creation Date of Medium',
-              dating_string: value
-            )
-          end
-
-          # puts value
-          # das folgende ist evtl. nicht notwendig, weil oben schon abgefragt wird, ob vorhanden und wenn nicht, dann erstellen
-          #  remove all datings but the first
-          if datings.where(label: 'Creation Date of Medium').count > 1
-            to_be_removed = datings.where(label: 'Creation Date of Medium').to_a[1..-1] # array indices start at 0 and go to -1
-            to_be_removed.each{|d| d.destroy}
-          end
-        end
+        add_relationship_dating(dr.relationship,
+          label: 'Creation Date of Medium',
+          dating_string: value
+        )
       end
     end
     puts "DONE: #{task}"
@@ -591,23 +569,10 @@ class MayaImporter
         next unless recent?([medium, dr.from, dr.to])
 
         datings = dr.relationship.datings
-
-        # add new ones after checking the condition if there is relation dating yet
-        if datings.where(label: 'Creation Date of Medium').count == 0
-          if value.present? # this checks for the empty string, only white-space, nil, 0 and so on
-            add_relationship_dating(dr.relationship,
-              label: 'Creation Date of Medium',
-              dating_string: value
-            )
-          end
-          # puts value
-          # das folgende ist evtl. nicht notwendig, weil oben schon abgefragt wird, ob vorhanden und wenn nicht, dann erstellen
-          #  remove all datings but the first
-          if datings.where(label: 'Creation Date of Medium').count > 1
-            to_be_removed = datings.where(label: 'Creation Date of Medium').to_a[1..-1] # array indices start at 0 and go to -1
-            to_be_removed.each{|d| d.destroy}
-          end
-        end
+        add_relationship_dating(dr.relationship,
+          label: 'Creation Date of Medium',
+          dating_string: value
+        )
       end
     end
     puts "DONE: #{task}"
@@ -621,23 +586,10 @@ class MayaImporter
         next unless recent?([medium, dr.from, dr.to])
 
         datings = dr.relationship.datings
-
-        # add new ones after checking the condition if there is relation dating yet
-        if datings.where(label: 'Creation Date of Medium').count == 0
-          if value.present? # this checks for the empty string, only white-space, nil, 0 and so on
-            add_relationship_dating(dr.relationship,
-              label: 'Creation Date of Medium',
-              dating_string: value
-            )
-          end
-          # puts value
-          # das folgende ist evtl. nicht notwendig, weil oben schon abgefragt wird, ob vorhanden und wenn nicht, dann erstellen
-          #  remove all datings but the first
-          if datings.where(label: 'Creation Date of Medium').count > 1
-            to_be_removed = datings.where(label: 'Creation Date of Medium').to_a[1..-1] # array indices start at 0 and go to -1
-            to_be_removed.each{|d| d.destroy}
-          end
-        end
+        add_relationship_dating(dr.relationship,
+          label: 'Creation Date of Medium',
+          dating_string: value
+        )
       end
     end
     puts "DONE: #{task}"
@@ -651,23 +603,10 @@ class MayaImporter
         next unless recent?([medium, dr.from, dr.to])
 
         datings = dr.relationship.datings
-
-        # add new ones after checking the condition if there is relation dating yet
-        if datings.where(label: 'Creation Date of Medium').count == 0
-          if value.present? # this checks for the empty string, only white-space, nil, 0 and so on
-            add_relationship_dating(dr.relationship,
-              label: 'Creation Date of Medium',
-              dating_string: value
-            )
-          end
-
-          # das folgende ist evtl. nicht notwendig, weil oben schon abgefragt wird, ob vorhanden und wenn nicht, dann erstellen
-          #  remove all datings but the first
-          if datings.where(label: 'Creation Date of Medium').count > 1
-            to_be_removed = datings.where(label: 'Creation Date of Medium').to_a[1..-1] # array indices start at 0 and go to -1
-            to_be_removed.each{|d| d.destroy}
-          end
-        end
+        add_relationship_dating(dr.relationship,
+          label: 'Creation Date of Medium',
+          dating_string: value
+        )
       end
     end
     puts "DONE: #{task}"
