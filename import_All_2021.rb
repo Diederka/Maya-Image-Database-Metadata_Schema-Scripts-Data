@@ -545,7 +545,7 @@ class MayaImporter
     task = "relation dating medium was created by person"
     media.entities.each do |medium|
       value = medium.dataset['date_time_created']
-      next if value && value.match?(/undated/)
+      # next if value && value.match?(/undated/)
 
       medium.outgoing_relationships.where(relation_name: 'medium was created by person').each do |dr|
         next unless recent?([medium, dr.from, dr.to])
@@ -563,7 +563,7 @@ class MayaImporter
     task = 'relation dating medium depicts artefact'
     media.entities.each do |medium|
       value = medium.dataset['date_time_created']
-      next if value && value.match?(/undated/)
+      # next if value && value.match?(/undated/)
 
       medium.outgoing_relationships.where(relation_name: 'medium depicts artefact').each do |dr|
         next unless recent?([medium, dr.from, dr.to])
@@ -580,7 +580,7 @@ class MayaImporter
     task = 'relation dating medium was created from collection'
     media.entities.each do |medium|
       value = medium.dataset['date_time_created']
-      next if value && value.match?(/undated/)
+      # next if value && value.match?(/undated/)
 
       medium.outgoing_relationships.where(relation_name: 'medium was created from collection').each do |dr|
         next unless recent?([medium, dr.from, dr.to])
@@ -597,7 +597,7 @@ class MayaImporter
     task = 'relation relation dating medium was created at place'
     media.entities.each do |medium|
       value = medium.dataset['date_time_created']
-      next if value && value.match?(/undated/)
+      # next if value && value.match?(/undated/)
       
       medium.outgoing_relationships.where(relation_name: 'medium was created at place').each do |dr|
         next unless recent?([medium, dr.from, dr.to])
@@ -608,6 +608,21 @@ class MayaImporter
           dating_string: value
         )
       end
+    end
+    puts "DONE: #{task}"
+
+    task = 'convert relationship datings to properties'
+    Relationship.includes(:datings).all.each do |r|
+      next if r.datings.empty?
+
+      props = r.datings.map{|d| "#{d.label}: #{d.dating_string}"}
+      puts "#{r.from_id} -> #{r.to_id}: #{props.inspect}"
+      unless r.update_attributes properties: (r.properties + props).uniq
+        @errors <<
+          "couldn not convert datings on relationship #{r.id} to " +
+          "properties: #{r.errors.full_messages.join(', ')}"
+      end
+      r.datings.destroy_all
     end
     puts "DONE: #{task}"
   end
