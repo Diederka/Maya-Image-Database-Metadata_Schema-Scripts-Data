@@ -611,20 +611,30 @@ class MayaImporter
     end
     puts "DONE: #{task}"
 
-    task = 'convert relationship datings to properties'
-    Relationship.includes(:datings).all.each do |r|
-      next if r.datings.empty?
+    # just needed once, deactivating:
+    # task = 'convert relationship datings to properties'
+    # Relationship.includes(:datings).all.each do |r|
+    #   next if r.datings.empty?
 
-      props = r.datings.map{|d| "#{d.label}: #{d.dating_string}"}
-      puts "#{r.from_id} -> #{r.to_id}: #{props.inspect}"
-      unless r.update_attributes properties: (r.properties + props).uniq
-        @errors <<
-          "couldn not convert datings on relationship #{r.id} to " +
-          "properties: #{r.errors.full_messages.join(', ')}"
-      end
-      r.datings.destroy_all
-    end
-    puts "DONE: #{task}"
+    #   props = r.datings.map{|d| "#{d.label}: #{d.dating_string}"}
+    #   puts "#{r.from_id} -> #{r.to_id}: #{props.inspect}"
+    #   unless r.update_attributes properties: (r.properties + props).uniq
+    #     @errors <<
+    #       "couldn not convert datings on relationship #{r.id} to " +
+    #       "properties: #{r.errors.full_messages.join(', ')}"
+    #   end
+    #   r.datings.destroy_all
+    # end
+    # puts "DONE: #{task}"
+
+    # just needed once, deactivating:
+    # ask = 'drop dating "Year" from media entities'
+    # datings = EntityDating.
+    #   joins(:owner).
+    #   where('entities.kind_id = ?', Kind.medium_kind).
+    #   where(label: 'Year').
+    #   destroy_all
+    # puts "DONE: #{task}"
   end
 
 
