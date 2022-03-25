@@ -620,7 +620,7 @@ class MayaImporter
     #   puts "#{r.from_id} -> #{r.to_id}: #{props.inspect}"
     #   unless r.update_attributes properties: (r.properties + props).uniq
     #     @errors <<
-    #       "couldn not convert datings on relationship #{r.id} to " +
+    #       "could not convert datings on relationship #{r.id} to " +
     #       "properties: #{r.errors.full_messages.join(', ')}"
     #   end
     #   r.datings.destroy_all
