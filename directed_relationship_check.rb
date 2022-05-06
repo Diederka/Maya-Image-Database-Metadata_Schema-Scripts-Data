@@ -37,3 +37,11 @@ DirectedRelationship.includes(relationship: [:normal, :reversal]).find_each do |
     validate(dr.relationship, dr, dr.relationship.reversal)
   end
 end
+
+DirectedRelationship.with_from.where('froms.id IS NULL').each do |dr|
+  dr.relationship.destroy
+end
+
+DirectedRelationship.with_to.where('tos.id IS NULL').each do |dr|
+  dr.relationship.destroy
+end
