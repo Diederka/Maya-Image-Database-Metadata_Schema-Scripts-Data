@@ -27,12 +27,23 @@ function list {
   $BIN list -v $REPO
 }
 
+function provide {
+  TARGET="/home/kor/backups/borg.latest/"
+  LATEST=$($BIN list --short $REPO | tail -n 1)
+
+  $BIN export-tar $REPO::$LATEST $TARGET/.kor.tar.gz.tmp
+  mv $TARGET/.kor.tar.gz.tmp $TARGET/kor.tar.gz
+}
+
 function nightly {
   ensure_dump
 
   # do the backup and clean up
   $BIN create $OPTS $REPO::nightly-{now:%Y%m%d_%H%M%S} $DATA_SPEC
   $BIN prune -v --list --keep-daily=30 --keep-weekly=8 --keep-monthly=24 --prefix=nightly $REPO
+
+  # provide latest snapshot for download
+  provide
 }
 
 function manual {
