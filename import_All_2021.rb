@@ -59,6 +59,7 @@ class MayaImporter
         places
         provenances
         holders
+        holders_as_creators
       end
 
       relationships
@@ -107,6 +108,7 @@ class MayaImporter
         'license' => record['License'],
         'cc_license_uri' => record['License URI'],
         'creator' => record['Creator of Image'],
+        'creator_holder' => record['Creator of Image (Holder)'],
         'date_time_created' => record['Date'],
         'file_name' => record['Image Number'],
 
@@ -266,7 +268,6 @@ class MayaImporter
       if entity.valid?
         entity.save unless @opts[:simulation]
       else
-
         msg = "person could not be created from CSV line #{i + 2}"
         error "#{msg}: #{entity.errors.full_messages}"
       end
@@ -375,6 +376,33 @@ class MayaImporter
     end
 
     puts "DONE: holders (#{items.size} lines found in CSV file)"
+  end
+
+  def holders_as_creators
+    guest_collection = Collection.find_by!(name: 'Guest Collection')
+    kind = Kind.find_by!(name: 'holder')
+
+    items = read_csv(@opts[:csv_file])
+    items.each_with_index do |record, i|
+      next unless record['Creator of Image (Holder)']
+
+      attrs = {
+        kind_id: kind.id,
+        name: record['Creator of Image (Holder)']
+      }
+      entity = kind.entities.find_or_initialize_by attrs do |entity|
+        entity.collection_id = guest_collection.id
+      end
+
+      if entity.valid?
+        entity.save unless @opts[:simulation]
+      else
+        msg = "holder (as creator) could not be created from CSV line #{i + 2}"
+        error "#{msg}: #{entity.errors.full_messages}"
+      end
+    end
+
+    puts "DONE: holders as creators (#{items.size} lines found in CSV file)"
   end
 
   def url_for(entity)
@@ -530,6 +558,15 @@ class MayaImporter
       next unless recent?([medium, person])
 
       add_relationship(medium, relation_name, person)
+    end
+    puts "DONE: #{relation_name}"
+
+    relation_name = "medium was created by holder"
+    media.entities.each do |medium|
+      holder = holders.entities.find_by name: medium.dataset['creator_holder']
+      next unless recent?([medium, holder])
+
+      add_relationship(medium, relation_name, holder)
     end
     puts "DONE: #{relation_name}"
 
