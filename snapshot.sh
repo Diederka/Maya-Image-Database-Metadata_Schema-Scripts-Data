@@ -33,6 +33,7 @@ function provide {
 
   $BIN export-tar $REPO::$LATEST $TARGET/.kor.tar.gz.tmp
   mv $TARGET/.kor.tar.gz.tmp $TARGET/kor.tar.gz
+  chmod +r $TARGET/kor.tar.gz
 }
 
 function nightly {
