@@ -255,6 +255,8 @@ class MayaImporter
 
     items = read_csv(@opts[:csv_file])
     items.each_with_index do |record, i|
+      next if record['Creator of Image'].blank?
+
       dataset = {
         'person_created_medium' => record['Image Number'],
         'person_documented_artefact' => record['Artefact Name'],
