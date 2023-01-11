@@ -113,7 +113,6 @@ class MayaImporter
         'file_name' => record['Image Number'],
 
         'contributor' => "Project Text Database and Dictionary of Classic Mayan",
-        'rights_holder' => record['Creator of Image'],
         'publisher' => "Maya Image Archive",
         'digitized_by' => record['Digitized by'],
 
@@ -125,6 +124,12 @@ class MayaImporter
         'medium_was_created_from_collection' => record['Collection Name'],
         'medium_was_created_at_place' => record['Place Name']
       }.select{|k, v| v.present?}
+
+      dataset['rights_holder'] = (
+        record['Creator of Image'].present? ?
+        record['Creator of Image'] :
+        record['Creator of Image (Holder)']
+      )
 
       entity = kind.entities.new(
         medium: (image_path ? Medium.new(document: File.open(image_path)) : nil),
