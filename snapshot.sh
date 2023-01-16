@@ -27,6 +27,10 @@ function list {
   $BIN list -v $REPO
 }
 
+function info {
+  $BIN info $REPO
+}
+
 function provide {
   TARGET="/home/kor/backups/borg.latest/"
   LATEST=$($BIN list --short $REPO | tail -n 1)

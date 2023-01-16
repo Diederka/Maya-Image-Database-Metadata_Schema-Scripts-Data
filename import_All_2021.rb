@@ -14,7 +14,6 @@
 # import entities (default: false)
 # DO_ENTITIES
 
-
 # loading the rails environment
 require "#{ENV['KOR_ROOT']}/config/environment"
 
@@ -106,6 +105,7 @@ class MayaImporter
         'image_description' => record['Image Description'],
         'folder_no' => record['Folder Number'],
         'license' => record['License'],
+        'license_note' => record['License Note'],
         'cc_license_uri' => record['License URI'],
         'creator' => record['Creator of Image'],
         'creator_holder' => record['Creator of Image (Holder)'],
