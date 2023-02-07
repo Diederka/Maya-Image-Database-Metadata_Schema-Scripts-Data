@@ -126,9 +126,9 @@ class MayaImporter
       }.select{|k, v| v.present?}
 
       dataset['rights_holder'] = (
-        record['Creator of Image'].present? ?
-        record['Creator of Image'] :
-        record['Creator of Image (Holder)']
+        record['Creator of Image (Holder)'].present? ?
+        record['Creator of Image (Holder)'] :
+        record['Creator of Image']
       )
 
       entity = kind.entities.new(
