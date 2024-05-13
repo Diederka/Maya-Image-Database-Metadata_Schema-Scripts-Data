@@ -3,8 +3,8 @@ Description=kor nightly index refresh (service)
 
 [Service]
 Type=oneshot
-User=kor
-Group=kor
-WorkingDirectory=/home/kor/rack/current
+User=app
+Group=app
+WorkingDirectory=/var/storage/host/kor/current
 Environment="RAILS_ENV=production"
-ExecStart=/usr/local/rvm/wrappers/default/bundle exec bin/kor index-all
+ExecStart=/usr/local/rbenv/shims/bundle exec bin/kor index-all

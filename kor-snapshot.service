@@ -5,4 +5,4 @@ Description=kor nightly snapshot (service)
 Type=oneshot
 User=kor
 Group=kor
-ExecStart=/bin/sh /home/kor/scripts.git/snapshot.sh nightly
+ExecStart=/bin/sh /opt/scripts.git/snapshot.sh nightly

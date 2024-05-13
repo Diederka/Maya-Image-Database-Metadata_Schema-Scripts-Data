@@ -6,7 +6,7 @@ ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $ROOT/.env
 REPO="$BACKUP_DIRECTORY/borg"
 
-DATA_DIR="/home/kor/rack"
+DATA_DIR="/var/storage/host/kor"
 BIN="/usr/bin/borg"
 OPTS="--compression none -v --show-rc --progress --info --stats"
 DATA_SPEC="$DATA_DIR/shared"
@@ -15,7 +15,7 @@ export BORG_RELOCATED_REPO_ACCESS_IS_OK=yes
 # ensure db dump is up to date
 function ensure_dump {
   # sudo systemctl stop httpd
-  mysqldump -u root -p"$MYSQL_PASSWORD" kor_production | gzip -c > $KOR_SHARED/dump.sql.gz
+  mysqldump -u root -p"$MYSQL_PASSWORD" kor | gzip -c > $KOR_SHARED/dump.sql.gz
   # sudo systemctl start httpd
 }
 
@@ -32,7 +32,7 @@ function info {
 }
 
 function provide {
-  TARGET="/home/kor/backups/borg.latest/"
+  TARGET="/var/storage/host/kor/shared/borg.latest/"
   LATEST=$($BIN list --short $REPO | tail -n 1)
 
   $BIN export-tar $REPO::$LATEST $TARGET/.kor.tar.gz.tmp
