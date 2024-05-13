@@ -15,7 +15,7 @@ export BORG_RELOCATED_REPO_ACCESS_IS_OK=yes
 # ensure db dump is up to date
 function ensure_dump {
   # sudo systemctl stop httpd
-  mysqldump -u root -p"$MYSQL_PASSWORD" kor | gzip -c > $KOR_SHARED/dump.sql.gz
+  mysqldump -u kor -p"$MYSQL_PASSWORD" kor | gzip -c > $KOR_SHARED/dump.sql.gz
   # sudo systemctl start httpd
 }
 
