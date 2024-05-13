@@ -11,6 +11,7 @@ BIN="/usr/bin/borg"
 OPTS="--compression none -v --show-rc --progress --info --stats"
 DATA_SPEC="$DATA_DIR/shared"
 export BORG_RELOCATED_REPO_ACCESS_IS_OK=yes
+export BORG_UNKNOWN_UNENCRYPTED_REPO_ACCESS_IS_OK=yes
 
 # ensure db dump is up to date
 function ensure_dump {
