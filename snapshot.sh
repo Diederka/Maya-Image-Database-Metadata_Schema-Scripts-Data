@@ -16,6 +16,7 @@ export BORG_RELOCATED_REPO_ACCESS_IS_OK=yes
 function ensure_dump {
   # sudo systemctl stop httpd
   mysqldump -h 127.0.0.1 -u kor -p"$MYSQL_PASSWORD" kor | gzip -c > $KOR_SHARED/dump.sql.gz
+  chown app: $KOR_SHARED/dump.sql.gz
   # sudo systemctl start httpd
 }
 
@@ -37,6 +38,7 @@ function provide {
 
   $BIN export-tar $REPO::$LATEST $TARGET/.kor.tar.gz.tmp
   mv $TARGET/.kor.tar.gz.tmp $TARGET/kor.tar.gz
+  chown app: $TARGET/kor.tar.gz
   chmod +r $TARGET/kor.tar.gz
 }
 
