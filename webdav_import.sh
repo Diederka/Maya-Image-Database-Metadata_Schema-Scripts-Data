@@ -20,9 +20,9 @@ sleep 5
 echo 'done'
 
 # prepare directories
-mkdir -p $WEBDAV/archive
-mv $WEBDAV/new $CURRENT || mkdir $CURRENT
-mkdir -p $WEBDAV/new
+sudo mkdir -p $WEBDAV/archive
+sudo mv $WEBDAV/new $CURRENT || mkdir $CURRENT
+sudo mkdir -p $WEBDAV/new
 sudo chown www-data: $WEBDAV/new
 sudo chown app: $CURRENT
 
