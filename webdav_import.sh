@@ -23,8 +23,8 @@ echo 'done'
 mkdir -p $WEBDAV/archive
 mv $WEBDAV/new $CURRENT || mkdir $CURRENT
 mkdir -p $WEBDAV/new
-sudo chown apache. $WEBDAV/new
-sudo chown kor. $CURRENT
+sudo chown www-data: $WEBDAV/new
+sudo chown app: $CURRENT
 
 # some checks
 if ! test -f $CURRENT/data.csv ; then
