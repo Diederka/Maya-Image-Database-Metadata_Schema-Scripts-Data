@@ -44,6 +44,7 @@ export CSV_FILE="$CURRENT/data.csv"
 export RAILS_ENV="production"
 
 # run the import
+cd /var/storage/host/kor/current
 $RUBY $ROOT/import_All_2021.rb &>> $CURRENT/log.txt
 
 # clean up
