@@ -5,7 +5,7 @@ source $ROOT/.env
 
 RUBY="/usr/local/rbenv/shims/ruby"
 TS=$(date +'%Y%m%d_%H%M%S')
-WEBDAV="/var/storage/host/kor/shared/webdav"
+WEBDAV="/var/storage/host/kor/webdav"
 CURRENT="$WEBDAV/archive/$TS"
 
 # make sure no previous run is active
