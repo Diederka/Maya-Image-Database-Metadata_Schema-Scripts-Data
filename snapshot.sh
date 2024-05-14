@@ -34,7 +34,7 @@ function info {
 }
 
 function provide {
-  TARGET="/var/storage/host/kor/shared/borg.latest/"
+  TARGET="/var/storage/host/kor/borg.latest"
   LATEST=$($BIN list --short $REPO | tail -n 1)
 
   $BIN export-tar $REPO::$LATEST $TARGET/.kor.tar.gz.tmp
