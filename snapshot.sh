@@ -62,4 +62,8 @@ function manual {
   echo "done"
 }
 
+mount /mnt/backup
+
 $CMD
+
+umount /mnt/backup
