@@ -6,3 +6,4 @@ Type=oneshot
 User=root
 Group=root
 ExecStart=/opt/scripts.git/snapshot.sh nightly
+SuccessExitStatus=0 1

@@ -34,7 +34,7 @@ function info {
 }
 
 function provide {
-  TARGET="/var/storage/host/kor/borg.latest"
+  TARGET="/mnt/backup/borg.latest"
   LATEST=$($BIN list --short $REPO | tail -n 1)
 
   $BIN export-tar $REPO::$LATEST $TARGET/.kor.tar.gz.tmp
@@ -62,8 +62,4 @@ function manual {
   echo "done"
 }
 
-mount /mnt/backup
-
 $CMD
-
-umount /mnt/backup
