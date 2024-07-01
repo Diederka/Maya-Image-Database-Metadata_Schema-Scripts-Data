@@ -2,8 +2,8 @@
 
 ROOT=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd $ROOT
-RUBY="/usr/local/rvm/wrappers/ruby-2.5.7/ruby"
-KOR_ROOT="/home/kor/rack/current"
+RUBY="/usr/local/rbenv/shims/ruby"
+KOR_ROOT="/var/storage/host/kor/current"
 
 # RUBY_VERSION=2.6.6
 
