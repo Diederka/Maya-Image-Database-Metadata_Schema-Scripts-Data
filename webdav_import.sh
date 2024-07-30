@@ -46,7 +46,7 @@ export RAILS_ENV="production"
 
 # run the import
 cd /var/storage/host/kor/current
-sudo -u app $RUBY $ROOT/import_All_2021.rb &>> $CURRENT/log.txt
+sudo -E -u app $RUBY $ROOT/import_All_2021.rb &>> $CURRENT/log.txt
 
 # clean up
 touch $WEBDAV/done.txt
