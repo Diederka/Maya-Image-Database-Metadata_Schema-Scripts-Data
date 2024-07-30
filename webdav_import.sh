@@ -20,11 +20,11 @@ sleep 5
 echo 'done'
 
 # prepare directories
-sudo mkdir -p $WEBDAV/archive
-sudo mv $WEBDAV/new $CURRENT || mkdir $CURRENT
-sudo mkdir -p $WEBDAV/new
-sudo chown www-data: $WEBDAV/new
-sudo chown app: $CURRENT
+mkdir -p $WEBDAV/archive
+mv $WEBDAV/new $CURRENT || mkdir $CURRENT
+mkdir -p $WEBDAV/new
+chown www-data: $WEBDAV/new
+chown app: $CURRENT
 
 # some checks
 if ! test -f $CURRENT/data.csv ; then
@@ -49,3 +49,6 @@ $RUBY $ROOT/import_All_2021.rb &>> $CURRENT/log.txt
 
 # clean up
 touch $WEBDAV/done.txt
+
+chown app: $CURRENT/log.txt
+chown app: $WEBDAV/done.txt
