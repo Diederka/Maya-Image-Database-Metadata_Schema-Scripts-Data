@@ -23,8 +23,6 @@ echo 'done'
 mkdir -p $WEBDAV/archive
 mv $WEBDAV/new $CURRENT || mkdir $CURRENT
 mkdir -p $WEBDAV/new
-chown www-data: $WEBDAV/new
-chown app: $CURRENT
 
 # some checks
 if ! test -f $CURRENT/data.csv ; then
@@ -35,6 +33,9 @@ if ! test -d $CURRENT/images ; then
   echo "$CURRENT/images couldn't be found" >> $CURRENT/log.txt
   exit 1
 fi
+
+chown -R www-data: $WEBDAV/new
+chown -R app: $CURRENT
 
 # set parameters for import script
 export SIMULATION="false"
