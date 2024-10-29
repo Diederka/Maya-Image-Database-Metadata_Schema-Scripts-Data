@@ -9,7 +9,7 @@ REPO="$BACKUP_DIRECTORY/borg"
 DATA_DIR="/var/storage/host/kor"
 BIN="/usr/bin/borg"
 OPTS="--compression none -v --show-rc --progress --info --stats"
-DATA_SPEC="$DATA_DIR/shared"
+DATA_SPEC="$DATA_DIR"
 export BORG_RELOCATED_REPO_ACCESS_IS_OK=yes
 export BORG_UNKNOWN_UNENCRYPTED_REPO_ACCESS_IS_OK=yes
 
@@ -34,7 +34,7 @@ function info {
 }
 
 function provide {
-  TARGET="/mnt/backup/borg.latest"
+  TARGET="/var/storage/host/backups/borg.latest"
   LATEST=$($BIN list --short $REPO | tail -n 1)
 
   $BIN export-tar $REPO::$LATEST $TARGET/.kor.tar.gz.tmp
