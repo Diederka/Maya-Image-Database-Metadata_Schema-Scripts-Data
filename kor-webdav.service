@@ -3,6 +3,6 @@ Description=import data from a public webdav to ConedaKOR (service)
 
 [Service]
 Type=oneshot
-User=app
-Group=app
+#User=app
+#Group=app
 ExecStart=/opt/scripts.git/webdav_import.sh
