@@ -694,7 +694,7 @@ class MayaImporter
     # @param path [String] the path to the csv file
     # @return [Array<String>] an array with each line of data from the csv file
     def read_csv(path)
-      unless File.exists?(path)
+      unless File.exist?(path)
         puts "file #{path} doesn't exist"
         return []
       end
@@ -734,10 +734,10 @@ class MayaImporter
     def image_path_for(image_number)
       image_path = "#{@opts[:images_dir]}/#{image_number}.jpg"
       
-      if !File.exists?(image_path)
+      if !File.exist?(image_path)
         case_image_path = cs_image(image_path)
 
-        if !case_image_path || !File.exists?(case_image_path)
+        if !case_image_path || !File.exist?(case_image_path)
           return nil
         end
 
