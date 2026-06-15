@@ -10,7 +10,7 @@ KOR_ROOT="/var/storage/host/kor/current"
 $RUBY client.rb
 $RUBY combine.rb
 
-mkdir $KOR_ROOT/public/oai-pmh-combined
+mkdir -p $KOR_ROOT/public/oai-pmh-combined
 cp \
   $ROOT/kor_xml/combined.free.xml \
   $ROOT/kor_xml/combined.nonfree.xml \
